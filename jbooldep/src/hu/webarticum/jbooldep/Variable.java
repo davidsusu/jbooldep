@@ -3,8 +3,6 @@ package hu.webarticum.jbooldep;
 
 /*
 
-TPDP
-
 Evaluable
 Definition
 Brick
@@ -33,8 +31,6 @@ Util.transformToCnf(expression[, variable])
 
 */
 
-public class Variable {
-    
-    // TODO
+public class Variable implements Brick, Definition, Evaluable {
     
 }
