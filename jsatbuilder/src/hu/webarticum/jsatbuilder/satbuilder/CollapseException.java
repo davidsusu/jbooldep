@@ -1,4 +1,4 @@
-package hu.webarticum.jbooldep;
+package hu.webarticum.jsatbuilder.satbuilder;
 
 // XXX: vs. listener?
 
