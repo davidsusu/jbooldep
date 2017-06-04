@@ -1,4 +1,4 @@
-package hu.webarticum.jsatbuilder.satbuilder;
+package hu.webarticum.jsatbuilder.satbuilder.core;
 
 
 public class Variable extends AbstractDefinition {
