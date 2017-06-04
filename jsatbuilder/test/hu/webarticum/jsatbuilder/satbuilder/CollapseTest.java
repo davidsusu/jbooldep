@@ -36,7 +36,7 @@ public class CollapseTest {
             variable2.remove();
             fail();
         } catch (CollapseException e) {
-
+            assertSame(constraint2, e.getConstraint());
         }
 
         assertTrue(variable1.isRemoved());
@@ -50,31 +50,32 @@ public class CollapseTest {
         assertTrue(variable3.isRemoved());
     }
 
-    public class TestConstraint implements Constraint {
+    public class TestConstraint extends AbstractConstraint {
         
-        private boolean removed = false;
-    
-        public TestConstraint(Definition definition, final boolean required) {
-            definition.addRemovalListener(new RemovalListener() {
+        final Definition definition;
+        
+        final RemovalListener removalListener;
+        
+        public TestConstraint(Definition definition, boolean required) {
+            super(required);
+            this.definition = definition;
+            definition.addRemovalListener(removalListener = new RemovalListener() {
                 
                 @Override
                 public void definitionRemoved(Definition definition) throws CollapseException {
-                    removed = true;
-                    if (required) {
-                        throw new CollapseException();
-                    }
+                    remove();
                 }
                 
             });
         }
-    
+
         @Override
         public void fillSolver(Solver solver) {
         }
-        
+
         @Override
-        public boolean isRemoved() {
-            return removed;
+        protected void unlinkDependencies() {
+            definition.removeRemovalListener(removalListener);
         }
         
     }

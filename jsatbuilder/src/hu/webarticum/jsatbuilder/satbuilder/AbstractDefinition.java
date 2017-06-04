@@ -22,6 +22,11 @@ public class AbstractDefinition implements Definition {
     }
 
     @Override
+    public void removeRemovalListener(RemovalListener removalListener) {
+        removalListeners.remove(removalListener);
+    }
+
+    @Override
     public boolean isRemoved() {
         return removed;
     }
