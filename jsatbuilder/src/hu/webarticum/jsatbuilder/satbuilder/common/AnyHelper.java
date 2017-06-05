@@ -8,31 +8,16 @@ import hu.webarticum.jsatbuilder.sat.Solver;
 import hu.webarticum.jsatbuilder.satbuilder.core.AbstractHelper;
 import hu.webarticum.jsatbuilder.satbuilder.core.CollapseException;
 import hu.webarticum.jsatbuilder.satbuilder.core.Definition;
-import hu.webarticum.jsatbuilder.satbuilder.core.RemovalListener;
 
 public class AnyHelper extends AbstractHelper {
 
     
     private final List<Definition> definitions;
 
-    private final RemovalListener removalListener;
-    
     public AnyHelper(Collection<Definition> definitions, boolean required) {
         this.definitions = new ArrayList<Definition>(definitions);
-        removalListener = new RemovalListener() {
-            
-            @Override
-            public void definitionRemoved(Definition definition) throws CollapseException {
-                AnyHelper.this.definitions.remove(definition);
-                definition.removeRemovalListener(removalListener);
-                if (AnyHelper.this.definitions.isEmpty()) {
-                    remove();
-                }
-            }
-            
-        };
         for (Definition definition: definitions) {
-            definition.addRemovalListener(removalListener);
+            getDependencyManager().linkDependency(definition);
         }
     }
     
@@ -52,11 +37,17 @@ public class AnyHelper extends AbstractHelper {
         
         solver.add(backClause);
     }
+    
+    @Override
+    public List<Definition> getDependencies() {
+        return new ArrayList<Definition>(definitions);
+    }
 
     @Override
-    protected void unlinkDependencies() {
-        for (Definition definition: definitions) {
-            definition.removeRemovalListener(removalListener);
+    public void dependencyRemoved(Definition definition) throws CollapseException {
+        definitions.remove(definition);
+        if (definitions.isEmpty()) {
+            remove();
         }
     }
     

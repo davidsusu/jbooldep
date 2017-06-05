@@ -2,6 +2,9 @@ package hu.webarticum.jsatbuilder.satbuilder.core;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 
 import hu.webarticum.jsatbuilder.sat.Solver;
@@ -54,19 +57,10 @@ public class CollapseTest {
         
         final Definition definition;
         
-        final RemovalListener removalListener;
-        
         public TestConstraint(Definition definition, boolean required) {
             super(required);
             this.definition = definition;
-            definition.addRemovalListener(removalListener = new RemovalListener() {
-                
-                @Override
-                public void definitionRemoved(Definition definition) throws CollapseException {
-                    remove();
-                }
-                
-            });
+            getDependencyManager().linkDependency(definition);
         }
 
         @Override
@@ -74,10 +68,15 @@ public class CollapseTest {
         }
 
         @Override
-        protected void unlinkDependencies() {
-            definition.removeRemovalListener(removalListener);
+        public List<Definition> getDependencies() {
+            return Arrays.asList(definition);
         }
-        
+
+        @Override
+        public void dependencyRemoved(Definition definition) throws CollapseException {
+            remove();
+        }
+
     }
 
 }

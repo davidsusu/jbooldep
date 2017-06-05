@@ -7,13 +7,22 @@ public class AbstractDefinition implements Definition {
     
     private boolean removed = false;
     
+    private boolean iteratingRemovalListeners = false;
+    
+    private List<RemovalListener> removalListenersToRemove = null;
+    
     private List<RemovalListener> removalListeners = new ArrayList<RemovalListener>(3);
     
     public void remove() throws CollapseException {
         removed = true;
+        iteratingRemovalListeners = true;
+        removalListenersToRemove = new ArrayList<RemovalListener>(3);
         for (RemovalListener removalListener: removalListeners) {
             removalListener.definitionRemoved(this);
         }
+        iteratingRemovalListeners = false;
+        removalListeners.removeAll(removalListenersToRemove);
+        removalListenersToRemove = null;
     }
     
     @Override
@@ -23,7 +32,11 @@ public class AbstractDefinition implements Definition {
 
     @Override
     public void removeRemovalListener(RemovalListener removalListener) {
-        removalListeners.remove(removalListener);
+        if (iteratingRemovalListeners) {
+            removalListenersToRemove.add(removalListener);
+        } else {
+            removalListeners.remove(removalListener);
+        }
     }
 
     @Override

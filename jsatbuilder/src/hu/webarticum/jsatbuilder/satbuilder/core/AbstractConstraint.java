@@ -6,9 +6,12 @@ public abstract class AbstractConstraint implements Constraint {
     private boolean removed;
     
     private boolean required;
+
+    private final DependencyManager dependencyManager;
     
     public AbstractConstraint(boolean required) {
         this.required = required;
+        dependencyManager = new DependencyManager(this);
     }
     
     @Override
@@ -27,14 +30,17 @@ public abstract class AbstractConstraint implements Constraint {
     @Override
     public void unset() {
         removed = true;
-        unlinkDependencies();
+        dependencyManager.unlinkDependencies();
     }
 
     @Override
     public boolean isRemoved() {
         return removed;
     }
-    
-    abstract protected void unlinkDependencies();
+
+    @Override
+    public DependencyManager getDependencyManager() {
+        return dependencyManager;
+    }
     
 }
