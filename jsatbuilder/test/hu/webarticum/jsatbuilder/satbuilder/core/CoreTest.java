@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import hu.webarticum.jsatbuilder.sat.Solver;
 
-public class CollapseTest {
+public class CoreTest {
 
     @Test
-    public void test() throws CollapseException {
+    public void testCollapse() throws CollapseException {
         Variable variable1 = new Variable();
         Variable variable2 = new Variable();
         Variable variable3 = new Variable();

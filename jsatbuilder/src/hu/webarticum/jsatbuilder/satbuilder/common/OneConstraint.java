@@ -1,46 +1,31 @@
 package hu.webarticum.jsatbuilder.satbuilder.common;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import hu.webarticum.jsatbuilder.sat.Solver;
-import hu.webarticum.jsatbuilder.satbuilder.core.AbstractConstraint;
-import hu.webarticum.jsatbuilder.satbuilder.core.CollapseException;
 import hu.webarticum.jsatbuilder.satbuilder.core.Definition;
 
-public class OneConstraint extends AbstractConstraint {
-    
-    private final List<Definition> definitions;
+public class OneConstraint extends AbstractLiteralListConstraint {
 
-    public OneConstraint(Collection<Definition> definitions, boolean required) {
-        super(required);
-        this.definitions = new ArrayList<Definition>(definitions);
-        for (Definition definition: definitions) {
-            getDependencyManager().linkDependency(definition);
-        }
+    public OneConstraint(Definition... definitions) {
+        super(false, definitions);
     }
     
+    public OneConstraint(DefinitionLiteral... literals) {
+        super(false, literals);
+    }
+    
+    public OneConstraint(Collection<?> literalsOrDefinitions) {
+        super(false, literalsOrDefinitions);
+    }
+
     @Override
     public void fillSolver(Solver solver) {
         Solver.Clause clause = new Solver.Clause();
-        for (Definition definition: definitions) {
-            clause.addLiteral(new Solver.Literal(definition, true));
+        for (Solver.Literal solverLiteral: getLiteralListManager().getSolverLiterals()) {
+            clause.addLiteral(solverLiteral);
         }
         solver.addUnique(clause);
-    }
-
-    @Override
-    public List<Definition> getDependencies() {
-        return new ArrayList<Definition>(definitions);
-    }
-
-    @Override
-    public void dependencyRemoved(Definition definition) throws CollapseException {
-        definitions.remove(definition);
-        if (definitions.isEmpty()) {
-            remove();
-        }
     }
 
 }
