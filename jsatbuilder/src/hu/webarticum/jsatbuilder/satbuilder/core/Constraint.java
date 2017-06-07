@@ -1,6 +1,9 @@
 package hu.webarticum.jsatbuilder.satbuilder.core;
 
 
+
+// TODO: optional constraints...
+
 public interface Constraint extends Brick, Dependant, SolverFiller {
     
     public boolean isRequired();
