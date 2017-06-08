@@ -9,7 +9,7 @@ import hu.webarticum.jsatbuilder.builder.core.Constraint;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
 import hu.webarticum.jsatbuilder.builder.core.Dependant;
 import hu.webarticum.jsatbuilder.builder.core.SolverFiller;
-import hu.webarticum.jsatbuilder.solver.Solver;
+import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class ConstraintSetSolverFiller implements SolverFiller {
     

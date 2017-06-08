@@ -1,4 +1,4 @@
-package hu.webarticum.jsatbuilder.solver;
+package hu.webarticum.jsatbuilder.solver.core;
 
 import java.util.ArrayList;
 import java.util.Collections;

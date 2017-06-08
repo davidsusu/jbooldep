@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import hu.webarticum.jsatbuilder.solver.Solver;
+import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class CoreTest {
 

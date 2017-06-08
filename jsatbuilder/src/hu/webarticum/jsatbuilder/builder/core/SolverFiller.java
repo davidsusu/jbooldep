@@ -1,6 +1,6 @@
 package hu.webarticum.jsatbuilder.builder.core;
 
-import hu.webarticum.jsatbuilder.solver.Solver;
+import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public interface SolverFiller {
     

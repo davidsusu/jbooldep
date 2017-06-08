@@ -1,7 +1,7 @@
 package hu.webarticum.jsatbuilder.builder.common;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.solver.Solver;
+import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class DefinitionLiteral {
     

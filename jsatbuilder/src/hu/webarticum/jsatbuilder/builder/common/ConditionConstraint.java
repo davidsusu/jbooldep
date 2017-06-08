@@ -6,7 +6,7 @@ import java.util.List;
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
 import hu.webarticum.jsatbuilder.builder.core.CollapseException;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.solver.Solver;
+import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class ConditionConstraint extends AbstractConstraint {
     

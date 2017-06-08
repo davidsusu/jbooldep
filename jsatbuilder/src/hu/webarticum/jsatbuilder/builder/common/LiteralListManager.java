@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.solver.Solver;
+import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class LiteralListManager {
     

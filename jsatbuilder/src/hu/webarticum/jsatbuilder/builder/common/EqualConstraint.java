@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.solver.Solver;
+import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class EqualConstraint extends AbstractLiteralListConstraint {
     
