@@ -36,8 +36,8 @@ abstract public class AbstractSolver implements Solver {
     }
 
     @Override
-    public void addSpecial(Clause clause, Integer mimimum, Integer maximum) {
-        specialClauseWrappers.add(new SpecialClauseWrapper(clause, mimimum, maximum));
+    public void addSpecial(Clause clause, Integer minimum, Integer maximum) {
+        specialClauseWrappers.add(new SpecialClauseWrapper(clause, minimum, maximum));
         registerClauseItems(clause);
     }
 
@@ -143,7 +143,7 @@ abstract public class AbstractSolver implements Solver {
         resultBuilder.append("\n    " + name + " {");
         for (SpecialClauseWrapper specialClauseWrapper: specialClauseWrappers) {
             resultBuilder.append("\n        ");
-            resultBuilder.append("[" + specialClauseWrapper.mimimum + ", " + specialClauseWrapper.maximum + "]" + specialClauseWrapper.clause.toString());
+            resultBuilder.append("[" + specialClauseWrapper.minimum + ", " + specialClauseWrapper.maximum + "]" + specialClauseWrapper.clause.toString());
         }
         resultBuilder.append("\n    }");
         return resultBuilder.toString();
@@ -179,11 +179,11 @@ abstract public class AbstractSolver implements Solver {
         return clauses;
     }
 
-    protected List<WeightedClauseWrapper> getWeightedClauses() {
-        return getWeightedClauses(1, 32, 1024);
+    protected List<WeightedClauseWrapper> getWeightedClauseWrappers() {
+        return getWeightedClauseWrappers(1, 32, 1024);
     }
 
-    protected List<WeightedClauseWrapper> getWeightedClauses(int level1, int level2, int level3) {
+    protected List<WeightedClauseWrapper> getWeightedClauseWrappers(int level1, int level2, int level3) {
         int lowPriorityWeight = level1;
         int mediumPriorityWeight = level1;
         int highPriorityWeight = level1;
@@ -214,15 +214,15 @@ abstract public class AbstractSolver implements Solver {
     
     protected class SpecialClauseWrapper {
         
-        final Clause clause;
+        public final Clause clause;
         
-        final Integer mimimum;
+        public final Integer minimum;
         
-        final Integer maximum;
+        public final Integer maximum;
         
-        SpecialClauseWrapper(Clause clause, Integer mimimum, Integer maximum) {
+        public SpecialClauseWrapper(Clause clause, Integer minimum, Integer maximum) {
             this.clause = clause;
-            this.mimimum = mimimum;
+            this.minimum = minimum;
             this.maximum = maximum;
         }
         
@@ -230,11 +230,11 @@ abstract public class AbstractSolver implements Solver {
     
     protected class WeightedClauseWrapper {
 
-        final Clause clause;
+        public final Clause clause;
         
-        final Integer weight;
+        public final Integer weight;
         
-        WeightedClauseWrapper(Clause clause, Integer weight) {
+        public WeightedClauseWrapper(Clause clause, Integer weight) {
             this.clause = clause;
             this.weight = weight;
         }
