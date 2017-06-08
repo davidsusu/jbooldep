@@ -13,6 +13,10 @@ public class ConditionConstraint extends AbstractConstraint {
     private final Definition definition;
     
     private final Solver.CLAUSE_PRIORITY priority;
+
+    public ConditionConstraint(Definition definition) {
+        this(definition, null);
+    }
     
     public ConditionConstraint(Definition definition, Solver.CLAUSE_PRIORITY priority) {
         super(false);
