@@ -2,6 +2,7 @@ package hu.webarticum.jsatbuilder.builder.core;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +14,17 @@ import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class ConstraintSetSolverFiller implements SolverFiller {
     
-    List<Constraint> constraints = new ArrayList<Constraint>();
+    private final boolean linked;
+    
+    private List<Constraint> constraints = new ArrayList<Constraint>();
+    
+    public ConstraintSetSolverFiller() {
+        this(false);
+    }
+    
+    public ConstraintSetSolverFiller(boolean linked) {
+        this.linked = linked;
+    }
     
     public void add(Constraint constraint) {
         constraints.add(constraint);
@@ -21,8 +32,8 @@ public class ConstraintSetSolverFiller implements SolverFiller {
     
     @Override
     public void fillSolver(Solver solver) {
-        Set<Dependant> handledDependants = new HashSet<Dependant>();
-        Set<Dependant> unhandledDependants = new HashSet<Dependant>();
+        Set<Dependant> handledDependants = createDependantSet();
+        Set<Dependant> unhandledDependants = createDependantSet();
         
         for (Constraint constraint: constraints) {
             if (!constraint.isRemoved()) {
@@ -31,7 +42,7 @@ public class ConstraintSetSolverFiller implements SolverFiller {
         }
         
         while (!unhandledDependants.isEmpty()) {
-            Set<Dependant> newDependants = new HashSet<Dependant>();
+            Set<Dependant> newDependants = createDependantSet();
             
             for (Dependant dependant: unhandledDependants) {
                 for (Definition definition: dependant.getDependencies()) {
@@ -55,6 +66,10 @@ public class ConstraintSetSolverFiller implements SolverFiller {
                 ((SolverFiller)dependant).fillSolver(solver);
             }
         }
+    }
+    
+    private Set<Dependant> createDependantSet() {
+        return linked ? new LinkedHashSet<Dependant>() : new HashSet<Dependant>();
     }
 
 }

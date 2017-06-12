@@ -140,6 +140,11 @@ public interface Solver {
             return new ModelIterator();
         }
         
+        @Override
+        public String toString() {
+            return variableValueMap.toString();
+        }
+        
         private class ModelIterator implements Iterator<Literal> {
             
             Iterator<Map.Entry<Object, Boolean>> variableValueMapIterator;
