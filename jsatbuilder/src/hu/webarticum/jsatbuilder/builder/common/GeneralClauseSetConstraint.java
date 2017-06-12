@@ -1,6 +1,7 @@
 package hu.webarticum.jsatbuilder.builder.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -16,6 +17,32 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
     private final List<List<DefinitionLiteral>> clauses;
     
     private final Definition condition;
+
+    public GeneralClauseSetConstraint(DefinitionLiteral[][] clauses) {
+        this(true, clauses, null);
+    }
+    
+    public GeneralClauseSetConstraint(boolean required, DefinitionLiteral[][] clauses) {
+        this(required, clauses, null);
+    }
+    
+    public GeneralClauseSetConstraint(boolean required, DefinitionLiteral[][] clauses, Definition condition) {
+        super(required);
+        this.clauses = new ArrayList<List<DefinitionLiteral>>();
+        for (DefinitionLiteral[] clause: clauses) {
+            this.clauses.add(new ArrayList<DefinitionLiteral>(Arrays.asList(clause)));
+        }
+        this.condition = condition;
+        linkDependencies();
+    }
+
+    public GeneralClauseSetConstraint(Collection<? extends Collection<DefinitionLiteral>> clauses) {
+        this(true, clauses, null);
+    }
+    
+    public GeneralClauseSetConstraint(boolean required, Collection<? extends Collection<DefinitionLiteral>> clauses) {
+        this(required, clauses, null);
+    }
     
     public GeneralClauseSetConstraint(boolean required, Collection<? extends Collection<DefinitionLiteral>> clauses, Definition condition) {
         super(required);
@@ -24,6 +51,10 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
             this.clauses.add(new ArrayList<DefinitionLiteral>(clause));
         }
         this.condition = condition;
+        linkDependencies();
+    }
+    
+    private void linkDependencies() {
         for (Definition definition: getDependencies()) {
             getDependencyManager().linkDependency(definition);
         }
