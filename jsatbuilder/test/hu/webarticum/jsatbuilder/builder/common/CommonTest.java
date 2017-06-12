@@ -27,8 +27,7 @@ public class CommonTest {
         constraints.add(new OrConstraint(v1_2, v1_3));
         constraints.add(new OrConstraint(v1_2, v2_2));
         
-        
-        Solver solver = (Solver)Class.forName("hu.webarticum.jsatbuilder.solver.sat4j.DefaultSat4jSolver").newInstance();
+        Solver solver = (Solver)Class.forName("hu.webarticum.jsatbuilder.solver.sat4j.LightSat4jSolver").newInstance();
         constraints.fillSolver(solver);
         
         if (!solver.run()) {
