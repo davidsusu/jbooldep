@@ -8,15 +8,27 @@ import hu.webarticum.jsatbuilder.solver.core.Solver;
 public class OneConstraint extends AbstractLiteralListConstraint {
 
     public OneConstraint(Definition... definitions) {
-        super(false, definitions);
+        super(true, definitions);
     }
     
     public OneConstraint(DefinitionLiteral... literals) {
-        super(false, literals);
+        super(true, literals);
     }
     
     public OneConstraint(Collection<?> literalsOrDefinitions) {
-        super(false, literalsOrDefinitions);
+        super(true, literalsOrDefinitions);
+    }
+
+    public OneConstraint(boolean required, Definition... definitions) {
+        super(required, definitions);
+    }
+    
+    public OneConstraint(boolean required, DefinitionLiteral... literals) {
+        super(required, literals);
+    }
+    
+    public OneConstraint(boolean required, Collection<?> literalsOrDefinitions) {
+        super(required, literalsOrDefinitions);
     }
 
     @Override

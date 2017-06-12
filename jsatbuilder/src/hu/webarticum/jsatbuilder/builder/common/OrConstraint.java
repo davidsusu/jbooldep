@@ -8,15 +8,27 @@ import hu.webarticum.jsatbuilder.solver.core.Solver;
 public class OrConstraint extends AbstractLiteralListConstraint {
 
     public OrConstraint(Definition... definitions) {
-        super(false, definitions);
+        super(true, definitions);
     }
     
     public OrConstraint(DefinitionLiteral... literals) {
-        super(false, literals);
+        super(true, literals);
     }
     
     public OrConstraint(Collection<?> literalsOrDefinitions) {
-        super(false, literalsOrDefinitions);
+        super(true, literalsOrDefinitions);
+    }
+
+    public OrConstraint(boolean required, Definition... definitions) {
+        super(required, definitions);
+    }
+    
+    public OrConstraint(boolean required, DefinitionLiteral... literals) {
+        super(required, literals);
+    }
+    
+    public OrConstraint(boolean required, Collection<?> literalsOrDefinitions) {
+        super(required, literalsOrDefinitions);
     }
 
     @Override
