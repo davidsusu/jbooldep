@@ -116,13 +116,13 @@ abstract public class AbstractSolver implements Solver {
         resultBuilder.append("Solver with " + variables.size() + " item(s) {");
         resultBuilder.append(clausesToString("normal", normalClauses));
         resultBuilder.append("\n");
-        resultBuilder.append(specialClauseWrappersToString("normal", specialClauseWrappers));
+        resultBuilder.append(specialClauseWrappersToString("special", specialClauseWrappers));
         resultBuilder.append("\n");
-        resultBuilder.append(clausesToString("normal", lowPriorityOptionalClauses));
+        resultBuilder.append(clausesToString("low-priority", lowPriorityOptionalClauses));
         resultBuilder.append("\n");
-        resultBuilder.append(clausesToString("normal", mediumPriorityOptionalClauses));
+        resultBuilder.append(clausesToString("medium-priority", mediumPriorityOptionalClauses));
         resultBuilder.append("\n");
-        resultBuilder.append(clausesToString("normal", highPriorityOptionalClauses));
+        resultBuilder.append(clausesToString("high-priority", highPriorityOptionalClauses));
         
         return resultBuilder.toString();
     }
