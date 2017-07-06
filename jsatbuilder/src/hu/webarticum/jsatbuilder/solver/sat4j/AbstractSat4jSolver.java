@@ -54,10 +54,15 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
         }
         for (SpecialClauseWrapper specialClauseWrapper: specialClauseWrappers) {
             if (specialClauseWrapper.minimum != null && specialClauseWrapper.maximum != null) {
-                solver.addExactly(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
-            } else if (specialClauseWrapper.minimum!=null) {
+                if (specialClauseWrapper.minimum.intValue() == specialClauseWrapper.maximum.intValue()) {
+                    solver.addExactly(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
+                } else {
+                    solver.addAtLeast(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
+                    solver.addAtMost(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.maximum);
+                }
+            } else if (specialClauseWrapper.minimum != null) {
                 solver.addAtLeast(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
-            } else if (specialClauseWrapper.maximum!=null) {
+            } else if (specialClauseWrapper.maximum != null) {
                 solver.addAtMost(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.maximum);
             } else {
                 solver.addClause(createSat4jVecInt(specialClauseWrapper.clause));
