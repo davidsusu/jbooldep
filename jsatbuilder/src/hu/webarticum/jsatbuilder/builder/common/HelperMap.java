@@ -105,6 +105,21 @@ public class HelperMap<T> implements Map<T, Helper> {
     public Set<Entry<T, Helper>> entrySet() {
         return innerMap.entrySet();
     }
+    
+    @Override
+    public String toString() {
+        return innerMap.toString();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return innerMap.equals(other);
+    }
+
+    @Override
+    public int hashCode() {
+        return innerMap.hashCode();
+    }
 
     private boolean register(T key, Helper helper) {
         if (helper.isRemoved()) {
