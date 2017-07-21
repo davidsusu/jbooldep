@@ -1,3 +1,4 @@
+
 package hu.webarticum.jsatbuilder.builder.core;
 
 
@@ -7,6 +8,10 @@ public class CollapseException extends Exception {
     
     
     private final Constraint constraint;
+
+    public CollapseException() {
+        this(null);
+    }
     
     public CollapseException(Constraint constraint) {
         this.constraint = constraint;
