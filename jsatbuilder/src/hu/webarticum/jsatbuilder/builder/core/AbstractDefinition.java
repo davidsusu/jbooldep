@@ -1,6 +1,7 @@
 package hu.webarticum.jsatbuilder.builder.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class AbstractDefinition implements Definition {
@@ -11,7 +12,7 @@ public class AbstractDefinition implements Definition {
     
     private List<RemovalListener> removalListenersToRemove = null;
     
-    private List<RemovalListener> removalListeners = new ArrayList<RemovalListener>(3);
+    private Collection<RemovalListener> removalListeners = new ArrayList<RemovalListener>(3);
     
     public void remove() throws CollapseException {
         removed = true;
