@@ -10,10 +10,19 @@ public class CollapseException extends Exception {
     private final Constraint constraint;
 
     public CollapseException() {
-        this(null);
+        this(null, "Constraint set collapsed");
     }
     
     public CollapseException(Constraint constraint) {
+        this(constraint, "Constraint collapsed: " + constraint);
+    }
+
+    public CollapseException(String message) {
+        this(null, message);
+    }
+    
+    public CollapseException(Constraint constraint, String message) {
+        super(message);
         this.constraint = constraint;
     }
     
