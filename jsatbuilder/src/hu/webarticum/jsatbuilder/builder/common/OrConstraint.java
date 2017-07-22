@@ -19,18 +19,6 @@ public class OrConstraint extends AbstractLiteralListConstraint {
         super(true, literalsOrDefinitions);
     }
 
-    public OrConstraint(boolean required, Definition... definitions) {
-        super(required, definitions);
-    }
-    
-    public OrConstraint(boolean required, DefinitionLiteral... literals) {
-        super(required, literals);
-    }
-    
-    public OrConstraint(boolean required, Collection<?> literalsOrDefinitions) {
-        super(required, literalsOrDefinitions);
-    }
-
     @Override
     public void fillSolver(Solver solver) {
         Solver.Clause clause = new Solver.Clause();

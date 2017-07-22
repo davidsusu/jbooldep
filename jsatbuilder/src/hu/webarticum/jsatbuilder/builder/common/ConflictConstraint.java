@@ -10,11 +10,7 @@ public class ConflictConstraint extends AbstractLiteralListConstraint {
     }
 
     public ConflictConstraint(DefinitionLiteral literal1, DefinitionLiteral literal2) {
-        this(false, literal1, literal2);
-    }
-    
-    public ConflictConstraint(boolean required, DefinitionLiteral literal1, DefinitionLiteral literal2) {
-        super(required, literal1, literal2);
+        super(false, literal1, literal2);
     }
 
     @Override

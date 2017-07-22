@@ -43,24 +43,6 @@ public class BoundConstraint extends AbstractLiteralListConstraint {
         this.maximum = maximum;
     }
 
-    public BoundConstraint(boolean required, Integer minimum, Integer maximum, Definition... definitions) {
-        super(required, definitions);
-        this.minimum = minimum;
-        this.maximum = maximum;
-    }
-    
-    public BoundConstraint(boolean required, Integer minimum, Integer maximum, DefinitionLiteral... literals) {
-        super(required, literals);
-        this.minimum = minimum;
-        this.maximum = maximum;
-    }
-    
-    public BoundConstraint(boolean required, Integer minimum, Integer maximum, Collection<?> literalsOrDefinitions) {
-        super(required, literalsOrDefinitions);
-        this.minimum = minimum;
-        this.maximum = maximum;
-    }
-
     @Override
     public void fillSolver(Solver solver) {
         Solver.Clause clause = new Solver.Clause();

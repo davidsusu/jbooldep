@@ -6,12 +6,28 @@ public abstract class AbstractConstraint implements Constraint {
     private boolean removed;
     
     private boolean required;
+    
+    private String label = "AbstractConstraint";
 
     private final DependencyManager dependencyManager;
+    
+    public AbstractConstraint() {
+        this(false);
+    }
     
     public AbstractConstraint(boolean required) {
         this.required = required;
         dependencyManager = new DependencyManager(this);
+    }
+    
+    public AbstractConstraint setRequired(boolean required) {
+        this.required = required;
+        return this;
+    }
+
+    public AbstractConstraint setLabel(String label) {
+        this.label = label;
+        return this;
     }
     
     @Override
@@ -41,6 +57,11 @@ public abstract class AbstractConstraint implements Constraint {
     @Override
     public DependencyManager getDependencyManager() {
         return dependencyManager;
+    }
+    
+    @Override
+    public String toString() {
+        return label;
     }
     
 }

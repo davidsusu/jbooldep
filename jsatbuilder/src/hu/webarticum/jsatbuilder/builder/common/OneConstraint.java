@@ -19,18 +19,6 @@ public class OneConstraint extends AbstractLiteralListConstraint {
         super(true, literalsOrDefinitions);
     }
 
-    public OneConstraint(boolean required, Definition... definitions) {
-        super(required, definitions);
-    }
-    
-    public OneConstraint(boolean required, DefinitionLiteral... literals) {
-        super(required, literals);
-    }
-    
-    public OneConstraint(boolean required, Collection<?> literalsOrDefinitions) {
-        super(required, literalsOrDefinitions);
-    }
-
     @Override
     public void fillSolver(Solver solver) {
         Solver.Clause clause = new Solver.Clause();

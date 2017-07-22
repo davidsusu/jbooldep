@@ -14,11 +14,7 @@ public class CauseConstraint extends AbstractConstraint {
     private Definition effect;
     
     public CauseConstraint(Definition cause, Definition effect) {
-        this(cause, effect, false);
-    }
-
-    public CauseConstraint(Definition cause, Definition effect, boolean required) {
-        super(required);
+        super(false);
         getDependencyManager().linkDependency(cause);
         getDependencyManager().linkDependency(effect);
     }
