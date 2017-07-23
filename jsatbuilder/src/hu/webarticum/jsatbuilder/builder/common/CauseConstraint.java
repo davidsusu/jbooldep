@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
-import hu.webarticum.jsatbuilder.builder.core.CollapseException;
+import hu.webarticum.jsatbuilder.builder.core.AllLiveManager;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
+import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class CauseConstraint extends AbstractConstraint {
@@ -13,10 +14,13 @@ public class CauseConstraint extends AbstractConstraint {
     private Definition cause;
     private Definition effect;
     
+    private final LiveManager liveManager;
+    
     public CauseConstraint(Definition cause, Definition effect) {
         super(false);
         getDependencyManager().linkDependency(cause);
         getDependencyManager().linkDependency(effect);
+        liveManager = new AllLiveManager(cause, effect);
     }
 
     @Override
@@ -31,10 +35,15 @@ public class CauseConstraint extends AbstractConstraint {
     public List<Definition> getDependencies() {
         return Arrays.asList(cause, effect);
     }
-
+    
     @Override
-    public void dependencyRemoved(Definition definition) throws CollapseException {
-        remove();
+    public LiveManager getLiveManager() {
+        return liveManager;
     }
 
+    @Override
+    protected void freeDefinition(Definition definition) {
+        // nothing to do
+    }
+    
 }

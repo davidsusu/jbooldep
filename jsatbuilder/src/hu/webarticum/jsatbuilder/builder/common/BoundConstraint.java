@@ -1,8 +1,12 @@
 package hu.webarticum.jsatbuilder.builder.common;
 
 import java.util.Collection;
+import java.util.List;
 
+import hu.webarticum.jsatbuilder.builder.core.AtLeastLiveManager;
+import hu.webarticum.jsatbuilder.builder.core.DefaultLiveManager;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
+import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class BoundConstraint extends AbstractLiteralListConstraint {
@@ -50,6 +54,15 @@ public class BoundConstraint extends AbstractLiteralListConstraint {
             clause.addLiteral(solverLiteral);
         }
         solver.addSpecial(clause, minimum, maximum);
+    }
+
+    @Override
+    protected LiveManager createLiveManager(List<Definition> definitions) {
+        if (minimum != null) {
+            return new AtLeastLiveManager(minimum, definitions);
+        } else {
+            return new DefaultLiveManager(definitions);
+        }
     }
 
 }

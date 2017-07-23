@@ -5,12 +5,15 @@ import java.util.Collection;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
-import hu.webarticum.jsatbuilder.builder.core.CollapseException;
+import hu.webarticum.jsatbuilder.builder.core.DefaultLiveManager;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
+import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 
 public abstract class AbstractLiteralListConstraint extends AbstractConstraint {
     
     private final LiteralListManager literalListManager;
+
+    private final LiveManager liveManager;
     
     public AbstractLiteralListConstraint(boolean required, Definition... definitions) {
         this(required, Arrays.asList(definitions));
@@ -23,9 +26,11 @@ public abstract class AbstractLiteralListConstraint extends AbstractConstraint {
     public AbstractLiteralListConstraint(boolean required, Collection<?> literalsOrDefinitions) {
         super(required);
         literalListManager = new LiteralListManager(literalsOrDefinitions);
-        for (Definition definition: literalListManager.getDefinitions()) {
+        List<Definition> definitions = literalListManager.getDefinitions();
+        for (Definition definition: definitions) {
             getDependencyManager().linkDependency(definition);
         }
+        liveManager = createLiveManager(definitions);
     }
     
     public LiteralListManager getLiteralListManager() {
@@ -38,11 +43,17 @@ public abstract class AbstractLiteralListConstraint extends AbstractConstraint {
     }
 
     @Override
-    public void dependencyRemoved(Definition definition) throws CollapseException {
+    public LiveManager getLiveManager() {
+        return liveManager;
+    }
+
+    @Override
+    protected void freeDefinition(Definition definition) {
         literalListManager.dependencyRemoved(definition);
-        if (literalListManager.isEmpty()) {
-            remove();
-        }
+    }
+
+    protected LiveManager createLiveManager(List<Definition> definitions) {
+        return new DefaultLiveManager(definitions);
     }
     
 }

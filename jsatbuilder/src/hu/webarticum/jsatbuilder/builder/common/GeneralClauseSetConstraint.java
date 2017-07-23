@@ -3,13 +3,17 @@ package hu.webarticum.jsatbuilder.builder.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
-import hu.webarticum.jsatbuilder.builder.core.CollapseException;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
+import hu.webarticum.jsatbuilder.builder.core.GroupedLiveManager;
+import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class GeneralClauseSetConstraint extends AbstractConstraint {
@@ -17,6 +21,8 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
     private final List<List<DefinitionLiteral>> clauses;
     
     private final Definition condition;
+    
+    private final LiveManager liveManager;
 
     public GeneralClauseSetConstraint(DefinitionLiteral[][] clauses) {
         this(true, clauses, null);
@@ -34,6 +40,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
         }
         this.condition = condition;
         linkDependencies();
+        liveManager = createLiveManager();
     }
 
     public GeneralClauseSetConstraint(Collection<? extends Collection<DefinitionLiteral>> clauses) {
@@ -52,6 +59,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
         }
         this.condition = condition;
         linkDependencies();
+        liveManager = createLiveManager();
     }
     
     private void linkDependencies() {
@@ -75,11 +83,28 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
     }
 
     @Override
-    public void dependencyRemoved(Definition definition) throws CollapseException {
-        // XXX
-        remove();
+    public LiveManager getLiveManager() {
+        return liveManager;
     }
 
+    @Override
+    protected void freeDefinition(Definition definition) {
+        Iterator<List<DefinitionLiteral>> outerIterator = clauses.iterator();
+        while (outerIterator.hasNext()) {
+            List<DefinitionLiteral> clause = outerIterator.next();
+            Iterator<DefinitionLiteral> innerIterator = clause.iterator();
+            while (innerIterator.hasNext()) {
+                DefinitionLiteral literal = innerIterator.next();
+                if (literal.getDefinition() == definition) {
+                    innerIterator.remove();
+                }
+            }
+            if (clause.isEmpty()) {
+                outerIterator.remove();
+            }
+        }
+    }
+    
     @Override
     public void fillSolver(Solver solver) {
         for (List<DefinitionLiteral> clause: clauses) {
@@ -92,6 +117,18 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
             }
             solver.add(solverClause);
         }
+    }
+    
+    protected LiveManager createLiveManager() {
+        List<Set<Definition>> groups = new ArrayList<Set<Definition>>();
+        for (List<DefinitionLiteral> clause: clauses) {
+            Set<Definition> definitions = new HashSet<Definition>();
+            for (DefinitionLiteral literal: clause) {
+                definitions.add(literal.getDefinition());
+            }
+            groups.add(definitions);
+        }
+        return new GroupedLiveManager(groups);
     }
     
 }

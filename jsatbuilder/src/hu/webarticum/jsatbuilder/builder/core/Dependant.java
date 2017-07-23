@@ -10,4 +10,6 @@ public interface Dependant {
 
     public DependencyManager getDependencyManager();
     
+    public LiveManager getLiveManager();
+    
 }

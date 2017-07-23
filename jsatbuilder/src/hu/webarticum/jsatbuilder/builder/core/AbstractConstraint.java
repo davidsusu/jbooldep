@@ -63,5 +63,18 @@ public abstract class AbstractConstraint implements Constraint {
     public String toString() {
         return label;
     }
+
+    @Override
+    public void dependencyRemoved(Definition definition) throws CollapseException {
+        LiveManager liveManager = getLiveManager();
+        liveManager.removeDefinition(definition);
+        if (!liveManager.isLive()) {
+            remove();
+        }
+        
+        freeDefinition(definition);
+    }
+    
+    abstract protected void freeDefinition(Definition definition);
     
 }

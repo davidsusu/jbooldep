@@ -24,5 +24,18 @@ public abstract class AbstractHelper extends AbstractDefinition implements Helpe
     public DependencyManager getDependencyManager() {
         return dependencyManager;
     }
+
+    @Override
+    public void dependencyRemoved(Definition definition) throws CollapseException {
+        LiveManager liveManager = getLiveManager();
+        liveManager.removeDefinition(definition);
+        if (!liveManager.isLive()) {
+            remove();
+        }
+        
+        freeDefinition(definition);
+    }
+    
+    abstract protected void freeDefinition(Definition definition);
     
 }

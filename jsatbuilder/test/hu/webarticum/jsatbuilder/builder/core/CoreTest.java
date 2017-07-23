@@ -57,10 +57,13 @@ public class CoreTest {
         
         final Definition definition;
         
+        final LiveManager liveManager;
+        
         public TestConstraint(Definition definition, boolean required) {
             super(required);
             this.definition = definition;
             getDependencyManager().linkDependency(definition);
+            liveManager = new DefaultLiveManager(definition);
         }
 
         @Override
@@ -71,10 +74,15 @@ public class CoreTest {
         public List<Definition> getDependencies() {
             return Arrays.asList(definition);
         }
+        
+        @Override
+        public LiveManager getLiveManager() {
+            return liveManager;
+        }
 
         @Override
-        public void dependencyRemoved(Definition definition) throws CollapseException {
-            remove();
+        protected void freeDefinition(Definition definition) {
+            // nothing to do
         }
 
     }
