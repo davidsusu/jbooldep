@@ -22,15 +22,15 @@ public class AnyHelper extends AbstractLiteralListHelper {
     @Override
     public void fillSolver(Solver solver) {
         Solver.Clause backClause = new Solver.Clause();
-        backClause.addLiteral(new Solver.Literal(this, true));
+        backClause.addLiteral(new Solver.Literal(this, false));
         
-        for (Definition definition: getLiteralListManager().getDefinitions()) {
+        for (Solver.Literal literal: getLiteralListManager().getSolverLiterals()) {
             Solver.Clause clause = new Solver.Clause();
-            clause.addLiteral(new Solver.Literal(definition, false));
+            clause.addLiteral(literal.getNegated());
             clause.addLiteral(new Solver.Literal(this, true));
             solver.add(clause);
             
-            backClause.addLiteral(new Solver.Literal(definition, true));
+            backClause.addLiteral(literal);
         }
         
         solver.add(backClause);
