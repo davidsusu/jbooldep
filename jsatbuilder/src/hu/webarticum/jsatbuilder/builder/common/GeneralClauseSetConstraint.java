@@ -12,7 +12,6 @@ import java.util.Set;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.GroupedLiveManager;
 import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 

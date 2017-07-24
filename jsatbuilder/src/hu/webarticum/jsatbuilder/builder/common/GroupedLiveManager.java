@@ -1,4 +1,4 @@
-package hu.webarticum.jsatbuilder.builder.core;
+package hu.webarticum.jsatbuilder.builder.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import hu.webarticum.jsatbuilder.builder.core.Definition;
+import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 
 public class GroupedLiveManager implements LiveManager {
     
