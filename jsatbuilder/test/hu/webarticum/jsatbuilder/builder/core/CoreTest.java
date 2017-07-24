@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import hu.webarticum.jsatbuilder.builder.common.DefaultLiveManager;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class CoreTest {

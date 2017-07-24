@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
-import hu.webarticum.jsatbuilder.builder.core.DefaultLiveManager;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
 import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 

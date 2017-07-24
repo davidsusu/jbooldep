@@ -1,9 +1,12 @@
-package hu.webarticum.jsatbuilder.builder.core;
+package hu.webarticum.jsatbuilder.builder.common;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import hu.webarticum.jsatbuilder.builder.core.Definition;
+import hu.webarticum.jsatbuilder.builder.core.LiveManager;
 
 public class AtLeastLiveManager implements LiveManager {
 
