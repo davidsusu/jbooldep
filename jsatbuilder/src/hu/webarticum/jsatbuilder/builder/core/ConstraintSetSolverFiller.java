@@ -30,6 +30,10 @@ public class ConstraintSetSolverFiller implements SolverFiller {
         constraints.add(constraint);
     }
     
+    public List<Constraint> getConstraints() {
+        return new ArrayList<Constraint>(constraints);
+    }
+    
     @Override
     public void fillSolver(Solver solver) {
         Set<Dependant> handledDependants = createDependantSet();
