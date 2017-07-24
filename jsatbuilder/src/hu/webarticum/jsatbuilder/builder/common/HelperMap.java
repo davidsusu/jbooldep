@@ -3,6 +3,7 @@ package hu.webarticum.jsatbuilder.builder.common;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -60,15 +61,18 @@ public class HelperMap<T> implements Map<T, Helper> {
     }
 
     @Override
-    public Helper put(T key, Helper value) {
-        if (!register(key, value)) {
-            return value;
+    public Helper put(T key, Helper helper) {
+        if (helper == null || helper.isRemoved()) {
+            return remove(key);
         }
+
+        Helper existing = innerMap.put(key, helper);
         
-        Helper existing = innerMap.put(key, value);
-        
-        if (existing != null) {
-            existing.removeRemovalListener(removalListener);
+        if (helper != existing) {
+            if (existing != null) {
+                existing.removeRemovalListener(removalListener);
+            }
+            helper.addRemovalListener(removalListener);
         }
         
         return existing;
@@ -82,7 +86,7 @@ public class HelperMap<T> implements Map<T, Helper> {
     @Override
     public void putAll(Map<? extends T, ? extends Helper> m) {
         for (Map.Entry<? extends T, ? extends Helper> entry: m.entrySet()) {
-            innerMap.put(entry.getKey(), entry.getValue());
+            put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -120,21 +124,18 @@ public class HelperMap<T> implements Map<T, Helper> {
     public int hashCode() {
         return innerMap.hashCode();
     }
-
-    private boolean register(T key, Helper helper) {
-        if (helper.isRemoved()) {
-            return false;
-        }
-        
-        helper.addRemovalListener(removalListener);
-        return true;
-    }
     
     private class HelperRemovalListener implements RemovalListener {
 
         @Override
         public void definitionRemoved(Definition definition) throws CollapseException {
-            innerMap.remove(definition);
+            Iterator<Map.Entry<T, Helper>> iterator = entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<T, Helper> entry = iterator.next();
+                if (entry.getValue() == definition) {
+                    iterator.remove();
+                }
+            }
         }
         
     }
