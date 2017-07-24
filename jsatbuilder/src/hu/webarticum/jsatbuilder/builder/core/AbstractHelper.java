@@ -8,6 +8,11 @@ public abstract class AbstractHelper extends AbstractDefinition implements Helpe
     public AbstractHelper() {
         dependencyManager = new DependencyManager(this);
     }
+
+    @Override
+    public AbstractHelper setLabel(String label) {
+        return (AbstractHelper)super.setLabel(label);
+    }
     
     @Override
     public void remove() throws CollapseException {

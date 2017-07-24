@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class AbstractDefinition implements Definition {
+
+    private String label = "";
     
     private boolean removed = false;
     
@@ -13,6 +15,11 @@ public class AbstractDefinition implements Definition {
     private List<RemovalListener> removalListenersToRemove = null;
     
     private Collection<RemovalListener> removalListeners = new ArrayList<RemovalListener>(3);
+
+    public AbstractDefinition setLabel(String label) {
+        this.label = label;
+        return this;
+    }
     
     public void remove() throws CollapseException {
         removed = true;
@@ -43,6 +50,11 @@ public class AbstractDefinition implements Definition {
     @Override
     public boolean isRemoved() {
         return removed;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "(" + label + ")";
     }
     
 }
