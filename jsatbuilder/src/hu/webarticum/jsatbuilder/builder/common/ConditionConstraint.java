@@ -28,6 +28,10 @@ public class ConditionConstraint extends AbstractConstraint {
         liveManager = new DefaultLiveManager(definition);
     }
 
+    public Solver.CLAUSE_PRIORITY getPriority() {
+        return priority;
+    }
+    
     @Override
     public List<Definition> getDependencies() {
         return Arrays.<Definition>asList(definition);
