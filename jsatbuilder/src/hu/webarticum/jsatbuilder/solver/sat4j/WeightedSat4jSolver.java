@@ -6,6 +6,7 @@ import org.sat4j.specs.ISolver;
 
 public class WeightedSat4jSolver extends AbstractSat4jSolver {
 
+    @Override
     protected void fillSolver() throws Exception {
         org.sat4j.maxsat.WeightedMaxSatDecorator weightedSolver = (org.sat4j.maxsat.WeightedMaxSatDecorator)solver;
         for (Clause clause: normalClauses) {

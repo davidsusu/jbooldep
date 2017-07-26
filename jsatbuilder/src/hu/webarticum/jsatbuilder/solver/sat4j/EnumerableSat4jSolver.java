@@ -21,7 +21,8 @@ public class EnumerableSat4jSolver extends AbstractSat4jSolver {
         }
         return (status==STATUS.SAT);
     }
-    
+
+    @Override
     protected ISolver createSolver() {
         return new ModelIterator(SolverFactory.newLight());
     }
