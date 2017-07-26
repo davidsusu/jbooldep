@@ -8,7 +8,7 @@ public interface Dependant {
 
     public void dependencyRemoved(Definition definition) throws CollapseException;
 
-    public DependencyManager getDependencyManager();
+    public DependencyLinker getDependencyLinker();
     
     public LiveManager getLiveManager();
     

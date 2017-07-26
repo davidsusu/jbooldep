@@ -24,7 +24,7 @@ public class ConditionConstraint extends AbstractConstraint {
         super(false);
         this.definition = definition;
         this.priority = priority;
-        getDependencyManager().linkDependency(definition);
+        getDependencyLinker().linkDependency(definition);
         liveManager = new DefaultLiveManager(definition);
     }
 

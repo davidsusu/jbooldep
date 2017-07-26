@@ -63,7 +63,7 @@ public class CoreTest {
         public TestConstraint(Definition definition, boolean required) {
             super(required);
             this.definition = definition;
-            getDependencyManager().linkDependency(definition);
+            getDependencyLinker().linkDependency(definition);
             liveManager = new DefaultLiveManager(definition);
         }
 

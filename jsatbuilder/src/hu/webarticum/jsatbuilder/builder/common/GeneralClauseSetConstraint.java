@@ -63,7 +63,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
     
     private void linkDependencies() {
         for (Definition definition: getDependencies()) {
-            getDependencyManager().linkDependency(definition);
+            getDependencyLinker().linkDependency(definition);
         }
     }
 

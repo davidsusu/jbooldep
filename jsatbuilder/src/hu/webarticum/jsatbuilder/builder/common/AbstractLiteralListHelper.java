@@ -26,7 +26,7 @@ public abstract class AbstractLiteralListHelper extends AbstractHelper {
         literalListManager = new LiteralListManager(literalsOrDefinitions);
         List<Definition> definitions = literalListManager.getDefinitions();
         for (Definition definition: definitions) {
-            getDependencyManager().linkDependency(definition);
+            getDependencyLinker().linkDependency(definition);
         }
         liveManager = createLiveManager(definitions);
     }

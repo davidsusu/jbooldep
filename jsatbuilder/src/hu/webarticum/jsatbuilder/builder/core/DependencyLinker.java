@@ -1,13 +1,13 @@
 package hu.webarticum.jsatbuilder.builder.core;
 
 
-public class DependencyManager {
+public class DependencyLinker {
     
     private final RemovalListener dependencyRemovalListener;
     
     private final Dependant dependant;
     
-    public DependencyManager(final Dependant dependant) {
+    public DependencyLinker(final Dependant dependant) {
         this.dependant = dependant;
         dependencyRemovalListener = new RemovalListener() {
             

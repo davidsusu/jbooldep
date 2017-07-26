@@ -9,7 +9,7 @@ public abstract class AbstractConstraint implements Constraint {
     
     private String label = "AbstractConstraint";
 
-    private final DependencyManager dependencyManager;
+    private final DependencyLinker dependencyLinker;
     
     public AbstractConstraint() {
         this(false);
@@ -17,7 +17,7 @@ public abstract class AbstractConstraint implements Constraint {
     
     public AbstractConstraint(boolean required) {
         this.required = required;
-        dependencyManager = new DependencyManager(this);
+        dependencyLinker = new DependencyLinker(this);
     }
     
     public AbstractConstraint setRequired(boolean required) {
@@ -46,7 +46,7 @@ public abstract class AbstractConstraint implements Constraint {
     @Override
     public void unset() {
         removed = true;
-        dependencyManager.unlinkDependencies();
+        dependencyLinker.unlinkDependencies();
     }
 
     @Override
@@ -55,8 +55,8 @@ public abstract class AbstractConstraint implements Constraint {
     }
 
     @Override
-    public DependencyManager getDependencyManager() {
-        return dependencyManager;
+    public DependencyLinker getDependencyLinker() {
+        return dependencyLinker;
     }
     
     @Override

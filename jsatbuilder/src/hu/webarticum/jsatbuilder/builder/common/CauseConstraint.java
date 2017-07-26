@@ -17,8 +17,8 @@ public class CauseConstraint extends AbstractConstraint {
     
     public CauseConstraint(Definition cause, Definition effect) {
         super(false);
-        getDependencyManager().linkDependency(cause);
-        getDependencyManager().linkDependency(effect);
+        getDependencyLinker().linkDependency(cause);
+        getDependencyLinker().linkDependency(effect);
         liveManager = new AllLiveManager(cause, effect);
     }
 

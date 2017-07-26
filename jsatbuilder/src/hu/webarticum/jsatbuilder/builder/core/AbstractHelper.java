@@ -3,10 +3,10 @@ package hu.webarticum.jsatbuilder.builder.core;
 
 public abstract class AbstractHelper extends AbstractDefinition implements Helper {
     
-    private final DependencyManager dependencyManager;
+    private final DependencyLinker dependencyLinker;
     
     public AbstractHelper() {
-        dependencyManager = new DependencyManager(this);
+        dependencyLinker = new DependencyLinker(this);
     }
 
     @Override
@@ -21,13 +21,13 @@ public abstract class AbstractHelper extends AbstractDefinition implements Helpe
         } catch (CollapseException e) {
             throw e;
         } finally {
-            dependencyManager.unlinkDependencies();
+            dependencyLinker.unlinkDependencies();
         }
     }
     
     @Override
-    public DependencyManager getDependencyManager() {
-        return dependencyManager;
+    public DependencyLinker getDependencyLinker() {
+        return dependencyLinker;
     }
 
     @Override
