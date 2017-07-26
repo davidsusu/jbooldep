@@ -66,9 +66,9 @@ public abstract class AbstractConstraint implements Constraint {
 
     @Override
     public void dependencyRemoved(Definition definition) throws CollapseException {
-        LiveManager liveManager = getLiveManager();
-        liveManager.removeDefinition(definition);
-        if (!liveManager.isLive()) {
+        Viability viability = getViability();
+        viability.removeDefinition(definition);
+        if (!viability.isViable()) {
             remove();
         }
         

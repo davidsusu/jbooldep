@@ -6,13 +6,13 @@ import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractHelper;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 
 public abstract class AbstractLiteralListHelper extends AbstractHelper {
 
     private final LiteralListManager literalListManager;
     
-    private final LiveManager liveManager;
+    private final Viability viability;
     
     public AbstractLiteralListHelper(Definition... definitions) {
         this(Arrays.asList(definitions));
@@ -28,7 +28,7 @@ public abstract class AbstractLiteralListHelper extends AbstractHelper {
         for (Definition definition: definitions) {
             getDependencyLinker().linkDependency(definition);
         }
-        liveManager = createLiveManager(definitions);
+        viability = createViability(definitions);
     }
     
     public LiteralListManager getLiteralListManager() {
@@ -41,8 +41,8 @@ public abstract class AbstractLiteralListHelper extends AbstractHelper {
     }
     
     @Override
-    public LiveManager getLiveManager() {
-        return liveManager;
+    public Viability getViability() {
+        return viability;
     }
 
     @Override
@@ -50,8 +50,8 @@ public abstract class AbstractLiteralListHelper extends AbstractHelper {
         literalListManager.dependencyRemoved(definition);
     }
     
-    protected LiveManager createLiveManager(List<Definition> definitions) {
-        return new DefaultLiveManager(definitions);
+    protected Viability createViability(List<Definition> definitions) {
+        return new DefaultViability(definitions);
     }
     
 }

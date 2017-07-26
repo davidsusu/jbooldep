@@ -3,7 +3,7 @@ package hu.webarticum.jsatbuilder.builder.common;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class ConflictConstraint extends AbstractLiteralListConstraint {
@@ -26,8 +26,8 @@ public class ConflictConstraint extends AbstractLiteralListConstraint {
     }
     
     @Override
-    protected LiveManager createLiveManager(List<Definition> definitions) {
-        return new AllLiveManager(definitions);
+    protected Viability createViability(List<Definition> definitions) {
+        return new AllViability(definitions);
     }
 
 }

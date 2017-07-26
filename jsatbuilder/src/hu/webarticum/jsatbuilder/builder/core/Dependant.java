@@ -10,6 +10,6 @@ public interface Dependant {
 
     public DependencyLinker getDependencyLinker();
     
-    public LiveManager getLiveManager();
+    public Viability getViability();
     
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class ConditionConstraint extends AbstractConstraint {
@@ -14,7 +14,7 @@ public class ConditionConstraint extends AbstractConstraint {
     
     private final Solver.CLAUSE_PRIORITY priority;
     
-    private final LiveManager liveManager;
+    private final Viability viability;
 
     public ConditionConstraint(Definition definition) {
         this(definition, null);
@@ -25,7 +25,7 @@ public class ConditionConstraint extends AbstractConstraint {
         this.definition = definition;
         this.priority = priority;
         getDependencyLinker().linkDependency(definition);
-        liveManager = new DefaultLiveManager(definition);
+        viability = new DefaultViability(definition);
     }
 
     public Solver.CLAUSE_PRIORITY getPriority() {
@@ -38,8 +38,8 @@ public class ConditionConstraint extends AbstractConstraint {
     }
 
     @Override
-    public LiveManager getLiveManager() {
-        return liveManager;
+    public Viability getViability() {
+        return viability;
     }
 
     @Override

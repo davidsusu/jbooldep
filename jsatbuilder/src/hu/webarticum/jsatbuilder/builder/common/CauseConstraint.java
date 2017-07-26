@@ -5,7 +5,7 @@ import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class CauseConstraint extends AbstractConstraint {
@@ -13,13 +13,13 @@ public class CauseConstraint extends AbstractConstraint {
     private Definition cause;
     private Definition effect;
     
-    private final LiveManager liveManager;
+    private final Viability viability;
     
     public CauseConstraint(Definition cause, Definition effect) {
         super(false);
         getDependencyLinker().linkDependency(cause);
         getDependencyLinker().linkDependency(effect);
-        liveManager = new AllLiveManager(cause, effect);
+        viability = new AllViability(cause, effect);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class CauseConstraint extends AbstractConstraint {
     }
     
     @Override
-    public LiveManager getLiveManager() {
-        return liveManager;
+    public Viability getViability() {
+        return viability;
     }
 
     @Override

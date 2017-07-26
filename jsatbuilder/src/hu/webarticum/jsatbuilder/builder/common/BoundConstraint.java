@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class BoundConstraint extends AbstractLiteralListConstraint {
@@ -55,11 +55,11 @@ public class BoundConstraint extends AbstractLiteralListConstraint {
     }
 
     @Override
-    protected LiveManager createLiveManager(List<Definition> definitions) {
+    protected Viability createViability(List<Definition> definitions) {
         if (minimum != null) {
-            return new AtLeastLiveManager(minimum, definitions);
+            return new AtLeastViability(minimum, definitions);
         } else {
-            return new DefaultLiveManager(definitions);
+            return new DefaultViability(definitions);
         }
     }
 

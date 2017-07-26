@@ -1,10 +1,10 @@
 package hu.webarticum.jsatbuilder.builder.core;
 
 
-public interface LiveManager {
+public interface Viability {
     
     public void removeDefinition(Definition definition);
     
-    public boolean isLive();
+    public boolean isViable();
     
 }

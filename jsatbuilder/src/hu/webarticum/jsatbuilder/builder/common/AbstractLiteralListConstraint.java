@@ -6,13 +6,13 @@ import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 
 public abstract class AbstractLiteralListConstraint extends AbstractConstraint {
     
     private final LiteralListManager literalListManager;
 
-    private final LiveManager liveManager;
+    private final Viability viability;
     
     public AbstractLiteralListConstraint(boolean required, Definition... definitions) {
         this(required, Arrays.asList(definitions));
@@ -29,7 +29,7 @@ public abstract class AbstractLiteralListConstraint extends AbstractConstraint {
         for (Definition definition: definitions) {
             getDependencyLinker().linkDependency(definition);
         }
-        liveManager = createLiveManager(definitions);
+        viability = createViability(definitions);
     }
     
     public LiteralListManager getLiteralListManager() {
@@ -42,8 +42,8 @@ public abstract class AbstractLiteralListConstraint extends AbstractConstraint {
     }
 
     @Override
-    public LiveManager getLiveManager() {
-        return liveManager;
+    public Viability getViability() {
+        return viability;
     }
 
     @Override
@@ -51,8 +51,8 @@ public abstract class AbstractLiteralListConstraint extends AbstractConstraint {
         literalListManager.dependencyRemoved(definition);
     }
 
-    protected LiveManager createLiveManager(List<Definition> definitions) {
-        return new DefaultLiveManager(definitions);
+    protected Viability createViability(List<Definition> definitions) {
+        return new DefaultViability(definitions);
     }
     
 }

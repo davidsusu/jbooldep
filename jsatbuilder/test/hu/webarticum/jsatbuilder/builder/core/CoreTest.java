@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import hu.webarticum.jsatbuilder.builder.common.DefaultLiveManager;
+import hu.webarticum.jsatbuilder.builder.common.DefaultViability;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class CoreTest {
@@ -58,13 +58,13 @@ public class CoreTest {
         
         final Definition definition;
         
-        final LiveManager liveManager;
+        final Viability viability;
         
         public TestConstraint(Definition definition, boolean required) {
             super(required);
             this.definition = definition;
             getDependencyLinker().linkDependency(definition);
-            liveManager = new DefaultLiveManager(definition);
+            viability = new DefaultViability(definition);
         }
 
         @Override
@@ -77,8 +77,8 @@ public class CoreTest {
         }
         
         @Override
-        public LiveManager getLiveManager() {
-            return liveManager;
+        public Viability getViability() {
+            return viability;
         }
 
         @Override

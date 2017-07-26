@@ -8,20 +8,20 @@ import java.util.List;
 import java.util.Set;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 
-public class GroupedLiveManager implements LiveManager {
+public class GroupedViability implements Viability {
     
     private final List<Set<Definition>> groups;
 
-    public GroupedLiveManager(Definition[]... groups) {
+    public GroupedViability(Definition[]... groups) {
         this.groups = new ArrayList<Set<Definition>>();
         for (Definition[] group: groups) {
             this.groups.add(new HashSet<Definition>(Arrays.asList(group)));
         }
     }
     
-    public GroupedLiveManager(Collection<? extends Collection<Definition>> groups) {
+    public GroupedViability(Collection<? extends Collection<Definition>> groups) {
         this.groups = new ArrayList<Set<Definition>>();
         for (Collection<Definition> group: groups) {
             this.groups.add(new HashSet<Definition>(group));
@@ -36,7 +36,7 @@ public class GroupedLiveManager implements LiveManager {
     }
 
     @Override
-    public boolean isLive() {
+    public boolean isViable() {
         for (Set<Definition> group: groups) {
             if (group.isEmpty()) {
                 return false;

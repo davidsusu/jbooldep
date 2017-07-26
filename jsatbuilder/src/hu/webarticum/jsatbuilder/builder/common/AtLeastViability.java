@@ -6,21 +6,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 
-public class AllLiveManager implements LiveManager {
+public class AtLeastViability implements Viability {
 
     private final Set<Definition> definitions;
     
-    private final int size;
+    private final int minimumSize;
 
-    public AllLiveManager(Definition... definitions) {
-        this(Arrays.asList(definitions));
+    public AtLeastViability(int minimumSize, Definition... definitions) {
+        this(minimumSize, Arrays.asList(definitions));
     }
     
-    public AllLiveManager(Collection<Definition> definitions) {
+    public AtLeastViability(int minimumSize, Collection<Definition> definitions) {
         this.definitions = new HashSet<Definition>(definitions);
-        this.size = this.definitions.size();
+        this.minimumSize = minimumSize;
     }
     
     @Override
@@ -29,8 +29,8 @@ public class AllLiveManager implements LiveManager {
     }
     
     @Override
-    public boolean isLive() {
-        return definitions.size() == size;
+    public boolean isViable() {
+        return definitions.size() >= minimumSize;
     }
 
 }

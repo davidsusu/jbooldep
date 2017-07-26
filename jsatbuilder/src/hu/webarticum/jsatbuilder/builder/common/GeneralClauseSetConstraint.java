@@ -12,7 +12,7 @@ import java.util.Set;
 
 import hu.webarticum.jsatbuilder.builder.core.AbstractConstraint;
 import hu.webarticum.jsatbuilder.builder.core.Definition;
-import hu.webarticum.jsatbuilder.builder.core.LiveManager;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class GeneralClauseSetConstraint extends AbstractConstraint {
@@ -21,7 +21,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
     
     private final Definition condition;
     
-    private final LiveManager liveManager;
+    private final Viability viability;
 
     public GeneralClauseSetConstraint(DefinitionLiteral[][] clauses) {
         this(true, clauses, null);
@@ -39,7 +39,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
         }
         this.condition = condition;
         linkDependencies();
-        liveManager = createLiveManager();
+        viability = createViability();
     }
 
     public GeneralClauseSetConstraint(Collection<? extends Collection<DefinitionLiteral>> clauses) {
@@ -58,7 +58,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
         }
         this.condition = condition;
         linkDependencies();
-        liveManager = createLiveManager();
+        viability = createViability();
     }
     
     private void linkDependencies() {
@@ -82,8 +82,8 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
     }
 
     @Override
-    public LiveManager getLiveManager() {
-        return liveManager;
+    public Viability getViability() {
+        return viability;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
         }
     }
     
-    protected LiveManager createLiveManager() {
+    protected Viability createViability() {
         List<Set<Definition>> groups = new ArrayList<Set<Definition>>();
         for (List<DefinitionLiteral> clause: clauses) {
             Set<Definition> definitions = new HashSet<Definition>();
@@ -127,7 +127,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
             }
             groups.add(definitions);
         }
-        return new GroupedLiveManager(groups);
+        return new GroupedViability(groups);
     }
     
 }
