@@ -33,7 +33,7 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
     }
     
     protected void buildSolver() {
-        solver = createSolver();
+        getSat4jSolver();
         solver.setTimeout(getTimeout());
         solver.newVar(variables.size());
         
@@ -123,6 +123,13 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
         return 100000;
     }
 
+    public ISolver getSat4jSolver() {
+        if (solver == null) {
+            solver = createSolver();
+        }
+        return solver;
+    }
+    
     abstract protected ISolver createSolver();
     
 }
