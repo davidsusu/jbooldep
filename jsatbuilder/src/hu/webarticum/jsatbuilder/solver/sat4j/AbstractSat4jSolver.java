@@ -74,15 +74,20 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
         model = new Model();
         
         boolean solved;
-        try {
-            solved = solver.isSatisfiable();
-        } catch (TimeoutException e) {
-            if (status == STATUS.ABORTED) {
-                messages.add("Aborted");
-            } else {
-                messages.add("Timeout reached: " + getTimeout());
+        
+        if (status == STATUS.UNSAT) {
+            solved = false;
+        } else {
+            try {
+                solved = solver.isSatisfiable();
+            } catch (TimeoutException e) {
+                if (status == STATUS.ABORTED) {
+                    messages.add("Aborted");
+                } else {
+                    messages.add("Timeout reached: " + getTimeout());
+                }
+                return STATUS.ABORTED;
             }
-            return STATUS.ABORTED;
         }
         
         if (status == STATUS.ABORTED) {
