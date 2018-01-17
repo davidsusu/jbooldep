@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'signing'
+apply plugin: 'maven'
+
+sourceCompatibility = "1.6";
+targetCompatibility = "1.6";
+
+version = '0.1'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+    
+    implementation 'org.ow2.sat4j:org.ow2.sat4j.core:2.3.5'
+    implementation 'org.ow2.sat4j:org.ow2.sat4j.maxsat:2.3.5'
+    implementation 'org.ow2.sat4j:org.ow2.sat4j.pb:2.3.5 '
+}
