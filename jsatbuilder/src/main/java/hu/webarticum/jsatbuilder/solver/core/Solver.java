@@ -10,10 +10,9 @@ import java.util.Map;
 
 public interface Solver {
 
-    // TODO: UNDECIDED
-    public enum STATUS {INITIAL, RUNNING, ABORTED, SAT, UNSAT};
+    public enum STATUS {INITIAL, RUNNING, ABORTED, UNDECIDED, SAT, UNSAT}
 
-    public enum CLAUSE_PRIORITY {LOW, MEDIUM, HIGH};
+    public enum CLAUSE_PRIORITY {LOW, MEDIUM, HIGH}
     
     public void add(Clause clause);
 

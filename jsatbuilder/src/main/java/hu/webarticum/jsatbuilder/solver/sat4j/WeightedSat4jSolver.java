@@ -31,8 +31,7 @@ public class WeightedSat4jSolver extends AbstractSat4jSolver {
     
     @Override
     protected ISolver createSolver() {
-        ISolver solver = new org.sat4j.maxsat.WeightedMaxSatDecorator(org.sat4j.pb.SolverFactory.newDefault());
-        return solver;
+        return new org.sat4j.maxsat.WeightedMaxSatDecorator(org.sat4j.pb.SolverFactory.newDefault());
     }
     
 }

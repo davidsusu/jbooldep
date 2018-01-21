@@ -52,8 +52,8 @@ public class ConstraintSetSolverFiller implements SolverFiller {
                 for (Definition definition: dependant.getDependencies()) {
                     if (
                         definition instanceof Dependant &&
-                        !handledDependants.contains(definition) &&
-                        !unhandledDependants.contains(definition)
+                        !handledDependants.contains((Dependant)definition) &&
+                        !unhandledDependants.contains((Dependant)definition)
                     ) {
                         newDependants.add((Dependant)definition);
                     }

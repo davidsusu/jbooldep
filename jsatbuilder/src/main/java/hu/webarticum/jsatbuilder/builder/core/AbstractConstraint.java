@@ -75,6 +75,6 @@ public abstract class AbstractConstraint implements Constraint {
         freeDefinition(definition);
     }
     
-    abstract protected void freeDefinition(Definition definition);
+    protected abstract void freeDefinition(Definition definition);
     
 }

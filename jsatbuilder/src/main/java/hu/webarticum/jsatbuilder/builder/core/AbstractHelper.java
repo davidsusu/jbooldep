@@ -18,8 +18,6 @@ public abstract class AbstractHelper extends AbstractDefinition implements Helpe
     public void remove() throws CollapseException {
         try {
             super.remove();
-        } catch (CollapseException e) {
-            throw e;
         } finally {
             dependencyLinker.unlinkDependencies();
         }
@@ -41,6 +39,6 @@ public abstract class AbstractHelper extends AbstractDefinition implements Helpe
         freeDefinition(definition);
     }
     
-    abstract protected void freeDefinition(Definition definition);
+    protected abstract void freeDefinition(Definition definition);
     
 }

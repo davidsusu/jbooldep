@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-abstract public class AbstractSolver implements Solver {
+public abstract class AbstractSolver implements Solver {
 
     protected volatile STATUS status = STATUS.INITIAL;
 

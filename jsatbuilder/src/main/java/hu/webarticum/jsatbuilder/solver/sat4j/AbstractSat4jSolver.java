@@ -9,7 +9,9 @@ import org.sat4j.specs.TimeoutException;
 import hu.webarticum.jsatbuilder.solver.core.AbstractSolver;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
-abstract public class AbstractSat4jSolver extends AbstractSolver {
+public abstract class AbstractSat4jSolver extends AbstractSolver {
+    
+    protected final int DEFAULT_TIMEOUT = 10000;
     
     protected volatile ISolver solver = null;
     
@@ -18,12 +20,12 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
         status = STATUS.RUNNING;
         buildSolver();
         status = runSolver();
-        return (status==STATUS.SAT);
+        return (status == STATUS.SAT);
     }
     
     @Override
-    synchronized public void close() {
-        if (solver!=null) {
+    public synchronized void close() {
+        if (solver != null) {
             if (status == STATUS.RUNNING) {
                 solver.expireTimeout();
                 status = STATUS.ABORTED;
@@ -83,10 +85,11 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
             } catch (TimeoutException e) {
                 if (status == STATUS.ABORTED) {
                     messages.add("Aborted");
+                    return STATUS.ABORTED;
                 } else {
-                    messages.add("Timeout reached: " + getTimeout());
+                    messages.add(e.getMessage());
+                    return STATUS.UNDECIDED;
                 }
-                return STATUS.ABORTED;
             }
         }
         
@@ -125,7 +128,7 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
     }
 
     protected int getTimeout() {
-        return 100000;
+        return DEFAULT_TIMEOUT;
     }
 
     public ISolver getSat4jSolver() {
@@ -135,6 +138,6 @@ abstract public class AbstractSat4jSolver extends AbstractSolver {
         return solver;
     }
     
-    abstract protected ISolver createSolver();
+    protected abstract ISolver createSolver();
     
 }

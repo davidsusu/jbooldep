@@ -7,7 +7,7 @@ public class CollapseException extends Exception {
     private static final long serialVersionUID = 1L;
     
     
-    private final Constraint constraint;
+    private final transient Constraint constraint;
 
     public CollapseException() {
         this(null, "Constraint set collapsed");
