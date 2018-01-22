@@ -6,7 +6,7 @@ import java.util.List;
 
 public class AbstractDefinition implements Definition {
 
-    private String label = "";
+    private String label = null;
     
     private boolean removed = false;
     
@@ -19,6 +19,10 @@ public class AbstractDefinition implements Definition {
     public AbstractDefinition setLabel(String label) {
         this.label = label;
         return this;
+    }
+
+    public String getLabel() {
+        return label;
     }
     
     public void remove() throws CollapseException {
@@ -52,9 +56,13 @@ public class AbstractDefinition implements Definition {
         return removed;
     }
 
+    public String getInfo() {
+        return this.getClass().getSimpleName();
+    }
+    
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "(" + label + ")";
+        return label == null ? getInfo() : label;
     }
     
 }

@@ -1,7 +1,7 @@
 # TODO
 
 ## 0.2 TODO:
-[ ] Definition.toString()
+[*] Definition.toString()
 [*] Constraint.toString()
 [ ] SatSolver interface
 [ ] more sophisticated viability
