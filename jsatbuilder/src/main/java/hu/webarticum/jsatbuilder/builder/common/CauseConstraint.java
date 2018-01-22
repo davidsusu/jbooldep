@@ -44,5 +44,10 @@ public class CauseConstraint extends AbstractConstraint {
     protected void freeDefinition(Definition definition) {
         // nothing to do
     }
+
+    @Override
+    public String getInfo() {
+        return getClass().getSimpleName() + "(" + cause + " -> " + effect + ")";
+    }
     
 }

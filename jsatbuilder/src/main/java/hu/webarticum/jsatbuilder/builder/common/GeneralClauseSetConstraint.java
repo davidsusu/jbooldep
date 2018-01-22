@@ -129,5 +129,18 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
         }
         return new GroupedViability(groups);
     }
+
+    protected String getClauseListString() {
+        List<String> clauseDescriptions = new ArrayList<String>();
+        for (List<DefinitionLiteral> clause: clauses) {
+            clauseDescriptions.add("[" + AbstractLiteralListConstraint.literalsListToString(clause) + "]");
+        }
+        return String.join(", ", clauseDescriptions.toArray(new String[clauseDescriptions.size()]));
+    }
+    
+    @Override
+    public String getInfo() {
+        return getClass().getSimpleName() + "([" + getClauseListString() + "])";
+    }
     
 }

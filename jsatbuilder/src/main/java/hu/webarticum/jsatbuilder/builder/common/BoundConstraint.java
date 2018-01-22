@@ -63,4 +63,9 @@ public class BoundConstraint extends AbstractLiteralListConstraint {
         }
     }
 
+    @Override
+    public String getInfo() {
+        return getClass().getSimpleName() + "(" + minimum + ", " + maximum + ", [" + getLiteralListString() + "])";
+    }
+    
 }

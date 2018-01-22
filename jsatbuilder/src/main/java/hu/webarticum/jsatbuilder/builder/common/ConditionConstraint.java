@@ -56,5 +56,10 @@ public class ConditionConstraint extends AbstractConstraint {
             solver.addOptional(clause, priority);
         }
     }
+
+    @Override
+    public String getInfo() {
+        return getClass().getSimpleName() + "(" + definition + ", " + priority + ")";
+    }
     
 }

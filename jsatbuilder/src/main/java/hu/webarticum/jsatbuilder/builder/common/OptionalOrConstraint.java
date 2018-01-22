@@ -37,4 +37,9 @@ public class OptionalOrConstraint extends AbstractLiteralListConstraint {
         solver.addOptional(clause, priority);
     }
 
+    @Override
+    public String getInfo() {
+        return getClass().getSimpleName() + "(" + priority + ", [" + getLiteralListString() + "])";
+    }
+    
 }

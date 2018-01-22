@@ -7,7 +7,7 @@ public abstract class AbstractConstraint implements Constraint {
     
     private boolean required;
     
-    private String label = "AbstractConstraint";
+    private String label = null;
 
     private final DependencyLinker dependencyLinker;
     
@@ -28,6 +28,10 @@ public abstract class AbstractConstraint implements Constraint {
     public AbstractConstraint setLabel(String label) {
         this.label = label;
         return this;
+    }
+
+    public String getLabel() {
+        return label;
     }
     
     @Override
@@ -59,9 +63,13 @@ public abstract class AbstractConstraint implements Constraint {
         return dependencyLinker;
     }
     
+    public String getInfo() {
+        return getClass().getSimpleName();
+    }
+    
     @Override
     public String toString() {
-        return label;
+        return label == null ? getInfo() : label;
     }
 
     @Override
