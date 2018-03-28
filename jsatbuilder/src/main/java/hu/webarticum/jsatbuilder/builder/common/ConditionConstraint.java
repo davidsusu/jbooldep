@@ -11,25 +11,47 @@ import hu.webarticum.jsatbuilder.solver.core.Solver;
 public class ConditionConstraint extends AbstractConstraint {
     
     private final Definition definition;
+
+    private final boolean optional;
     
-    private final Solver.CLAUSE_PRIORITY priority;
+    private final boolean important;
+    
+    private final int weight;
     
     private final Viability viability;
 
     public ConditionConstraint(Definition definition) {
-        this(definition, null);
+        this(definition, false, false, 0);
     }
-    
-    public ConditionConstraint(Definition definition, Solver.CLAUSE_PRIORITY priority) {
+
+    public ConditionConstraint(Definition definition, int weight) {
+        this(definition, true, false, weight);
+    }
+
+    public ConditionConstraint(Definition definition, int weight, boolean important) {
+        this(definition, true, important, weight);
+    }
+
+    protected ConditionConstraint(Definition definition, boolean optional, boolean important, int weight) {
         super(false);
         this.definition = definition;
-        this.priority = priority;
+        this.optional = optional;
+        this.important = important;
+        this.weight = weight;
         getDependencyLinker().linkDependency(definition);
         viability = new DefaultViability(definition);
     }
 
-    public Solver.CLAUSE_PRIORITY getPriority() {
-        return priority;
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public boolean isImportant() {
+        return important;
+    }
+    
+    public int getWeight() {
+        return weight;
     }
     
     @Override
@@ -50,16 +72,24 @@ public class ConditionConstraint extends AbstractConstraint {
     @Override
     public void fillSolver(Solver solver) {
         Solver.Clause clause = new Solver.Clause(new Solver.Literal(definition, true));
-        if (priority == null) {
+        if (!optional) {
             solver.add(clause);
+        } else if (important) {
+            solver.addImportantOptional(clause, weight);
         } else {
-            solver.addOptional(clause, priority);
+            solver.addOptional(clause, weight);
         }
     }
 
     @Override
     public String getInfo() {
-        return getClass().getSimpleName() + "(" + definition + ", " + priority + ")";
+        return
+            getClass().getSimpleName() + "(" +
+            definition + ", " +
+            optional + ", " +
+            important + ", " +
+            weight + ")"
+        ;
     }
     
 }

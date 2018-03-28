@@ -50,24 +50,23 @@ public abstract class AbstractSat4jSolver extends AbstractSolver {
     }
     
     protected void fillSolver() throws Exception {
-        List<Solver.Clause> _normalClauses = getNormalClausesForDecision();
+        List<Solver.Clause> _normalClauses = getClausesForDecision();
         for (Clause clause: _normalClauses) {
             solver.addClause(createSat4jVecInt(clause));
         }
-        for (SpecialClauseWrapper specialClauseWrapper: specialClauseWrappers) {
-            if (specialClauseWrapper.minimum != null && specialClauseWrapper.maximum != null) {
-                if (specialClauseWrapper.minimum.intValue() == specialClauseWrapper.maximum.intValue()) {
-                    solver.addExactly(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
-                } else {
-                    solver.addAtLeast(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
-                    solver.addAtMost(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.maximum);
-                }
-            } else if (specialClauseWrapper.minimum != null) {
-                solver.addAtLeast(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
-            } else if (specialClauseWrapper.maximum != null) {
-                solver.addAtMost(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.maximum);
+        for (CardinalityClauseWrapper cardinalityClauseWrapper: cardinalityClauses) {
+            VecInt sat4jClause = createSat4jVecInt(cardinalityClauseWrapper.clause);
+            if (cardinalityClauseWrapper.isExactly()) {
+                solver.addExactly(sat4jClause, cardinalityClauseWrapper.minimum);
+            } else if (cardinalityClauseWrapper.isBound()) {
+                solver.addAtLeast(sat4jClause, cardinalityClauseWrapper.minimum);
+                solver.addAtMost(sat4jClause, cardinalityClauseWrapper.maximum);
+            } else if (cardinalityClauseWrapper.isAtLeast()) {
+                solver.addAtLeast(sat4jClause, cardinalityClauseWrapper.minimum);
+            } else if (cardinalityClauseWrapper.isAtMost()) {
+                solver.addAtMost(sat4jClause, cardinalityClauseWrapper.maximum);
             } else {
-                solver.addClause(createSat4jVecInt(specialClauseWrapper.clause));
+                solver.addClause(sat4jClause);
             }
         }
     }

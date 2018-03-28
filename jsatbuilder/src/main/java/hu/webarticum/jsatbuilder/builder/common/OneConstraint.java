@@ -25,7 +25,7 @@ public class OneConstraint extends AbstractLiteralListConstraint {
         for (Solver.Literal solverLiteral: getLiteralListManager().getSolverLiterals()) {
             clause.addLiteral(solverLiteral);
         }
-        solver.addUnique(clause);
+        solver.addCardinality(clause, 1, 1);
     }
 
 }

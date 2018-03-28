@@ -2,30 +2,34 @@ package hu.webarticum.jsatbuilder.builder.common;
 
 import java.util.Collection;
 
-import hu.webarticum.jsatbuilder.builder.core.Definition;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class OptionalOrConstraint extends AbstractLiteralListConstraint {
+
+    private final boolean important;
     
-    private final Solver.CLAUSE_PRIORITY priority;
+    private final int weight;
     
-    public OptionalOrConstraint(Solver.CLAUSE_PRIORITY priority, Definition... definitions) {
-        super(true, definitions);
-        this.priority = priority;
-    }
-    
-    public OptionalOrConstraint(Solver.CLAUSE_PRIORITY priority, DefinitionLiteral... literals) {
-        super(true, literals);
-        this.priority = priority;
-    }
-    
-    public OptionalOrConstraint(Solver.CLAUSE_PRIORITY priority, Collection<?> literalsOrDefinitions) {
-        super(true, literalsOrDefinitions);
-        this.priority = priority;
+    public OptionalOrConstraint(Collection<?> literalsOrDefinitions, int weight) {
+        this(literalsOrDefinitions, false, weight);
     }
 
-    public Solver.CLAUSE_PRIORITY getPriority() {
-        return priority;
+    public OptionalOrConstraint(Collection<?> literalsOrDefinitions, int weight, boolean important) {
+        this(literalsOrDefinitions, important, weight);
+    }
+
+    protected OptionalOrConstraint(Collection<?> literalsOrDefinitions, boolean important, int weight) {
+        super(true, literalsOrDefinitions);
+        this.important = important;
+        this.weight = weight;
+    }
+    
+    public boolean isImportant() {
+        return important;
+    }
+    
+    public int getWeight() {
+        return weight;
     }
     
     @Override
@@ -34,12 +38,16 @@ public class OptionalOrConstraint extends AbstractLiteralListConstraint {
         for (Solver.Literal solverLiteral: getLiteralListManager().getSolverLiterals()) {
             clause.addLiteral(solverLiteral);
         }
-        solver.addOptional(clause, priority);
+        if (important) {
+            solver.addImportantOptional(clause, weight);
+        } else {
+            solver.addOptional(clause, weight);
+        }
     }
 
     @Override
     public String getInfo() {
-        return getClass().getSimpleName() + "(" + priority + ", [" + getLiteralListString() + "])";
+        return getClass().getSimpleName() + "(" + weight + ", " + important + ", [" + getLiteralListString() + "])";
     }
     
 }

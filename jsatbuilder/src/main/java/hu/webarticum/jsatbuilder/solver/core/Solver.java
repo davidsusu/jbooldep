@@ -12,19 +12,15 @@ public interface Solver {
 
     public enum STATUS {INITIAL, RUNNING, ABORTED, UNDECIDED, SAT, UNSAT}
 
-    public enum CLAUSE_PRIORITY {LOW, MEDIUM, HIGH}
-    
     public void add(Clause clause);
 
-    public void addUnique(Clause clause);
+    public void addCardinality(Clause clause, int minimum);
 
-    public void addSpecial(Clause clause, Integer minimum, Integer maximum);
+    public void addCardinality(Clause clause, int minimum, int maximum);
 
-    public void addOptional(Clause clause);
+    public void addOptional(Clause clause, int weight);
 
-    public void addOptional(Clause clause, CLAUSE_PRIORITY priority);
-
-    public void shuffle();
+    public void addImportantOptional(Clause clause, int weight);
 
     public boolean run();
     

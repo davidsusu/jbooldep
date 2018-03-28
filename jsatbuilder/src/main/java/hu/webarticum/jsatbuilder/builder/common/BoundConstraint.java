@@ -51,7 +51,12 @@ public class BoundConstraint extends AbstractLiteralListConstraint {
         for (Solver.Literal solverLiteral: getLiteralListManager().getSolverLiterals()) {
             clause.addLiteral(solverLiteral);
         }
-        solver.addSpecial(clause, minimum, maximum);
+        if (maximum == null) {
+            solver.addCardinality(clause, minimum);
+        } else {
+            int _minimum = minimum == null ? 0 : minimum;
+            solver.addCardinality(clause, _minimum, maximum);
+        }
     }
 
     @Override

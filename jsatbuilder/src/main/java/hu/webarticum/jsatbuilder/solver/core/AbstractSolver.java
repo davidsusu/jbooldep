@@ -12,13 +12,11 @@ public abstract class AbstractSolver implements Solver {
 
     protected List<Clause> normalClauses = new ArrayList<Clause>();
 
-    protected List<SpecialClauseWrapper> specialClauseWrappers = new ArrayList<SpecialClauseWrapper>();
+    protected List<CardinalityClauseWrapper> cardinalityClauses = new ArrayList<CardinalityClauseWrapper>();
 
-    protected List<Clause> lowPriorityOptionalClauses = new ArrayList<Clause>();
+    protected List<WeightedClauseWrapper> optionalClauses = new ArrayList<WeightedClauseWrapper>();
 
-    protected List<Clause> mediumPriorityOptionalClauses = new ArrayList<Clause>();
-
-    protected List<Clause> highPriorityOptionalClauses = new ArrayList<Clause>();
+    protected List<WeightedClauseWrapper> importantOptionalClauses = new ArrayList<WeightedClauseWrapper>();
 
     protected Model model = new Model();
     
@@ -31,40 +29,29 @@ public abstract class AbstractSolver implements Solver {
     }
 
     @Override
-    public void addUnique(Clause clause) {
-        addSpecial(clause, 1, 1);
-    }
-
-    @Override
-    public void addSpecial(Clause clause, Integer minimum, Integer maximum) {
-        specialClauseWrappers.add(new SpecialClauseWrapper(clause, minimum, maximum));
+    public void addCardinality(Clause clause, int minimum) {
+        cardinalityClauses.add(new CardinalityClauseWrapper(clause, minimum));
         registerClauseItems(clause);
     }
 
     @Override
-    public void addOptional(Clause clause) {
-        addOptional(clause, CLAUSE_PRIORITY.MEDIUM);
-    }
-
-    @Override
-    public void addOptional(Clause clause, CLAUSE_PRIORITY priority) {
-        switch (priority) {
-            case LOW:
-                lowPriorityOptionalClauses.add(clause);
-                break;
-            case MEDIUM:
-                mediumPriorityOptionalClauses.add(clause);
-                break;
-            case HIGH:
-                highPriorityOptionalClauses.add(clause);
-                break;
-            default:
-                return;
-        }
+    public void addCardinality(Clause clause, int minimum, int maximum) {
+        cardinalityClauses.add(new CardinalityClauseWrapper(clause, minimum, maximum));
         registerClauseItems(clause);
     }
 
     @Override
+    public void addOptional(Clause clause, int weight) {
+        optionalClauses.add(new WeightedClauseWrapper(clause, weight));
+        registerClauseItems(clause);
+    }
+
+    @Override
+    public void addImportantOptional(Clause clause, int weight) {
+        importantOptionalClauses.add(new WeightedClauseWrapper(clause, weight));
+        registerClauseItems(clause);
+    }
+
     public void shuffle() {
         Collections.shuffle(variables);
         
@@ -73,24 +60,19 @@ public abstract class AbstractSolver implements Solver {
             clause.shuffle();
         }
         
-        Collections.shuffle(specialClauseWrappers);
-        for (SpecialClauseWrapper specialClauseWrapper: specialClauseWrappers) {
-            specialClauseWrapper.clause.shuffle();
+        Collections.shuffle(cardinalityClauses);
+        for (CardinalityClauseWrapper cardinalityClauseWrapper: cardinalityClauses) {
+            cardinalityClauseWrapper.clause.shuffle();
         }
-        
-        Collections.shuffle(lowPriorityOptionalClauses);
-        for (Clause clause: lowPriorityOptionalClauses) {
-            clause.shuffle();
+
+        Collections.shuffle(optionalClauses);
+        for (WeightedClauseWrapper weightedClauseWrapper: optionalClauses) {
+            weightedClauseWrapper.clause.shuffle();
         }
-        
-        Collections.shuffle(mediumPriorityOptionalClauses);
-        for (Clause clause: mediumPriorityOptionalClauses) {
-            clause.shuffle();
-        }
-        
-        Collections.shuffle(highPriorityOptionalClauses);
-        for (Clause clause: highPriorityOptionalClauses) {
-            clause.shuffle();
+
+        Collections.shuffle(importantOptionalClauses);
+        for (WeightedClauseWrapper weightedClauseWrapper: importantOptionalClauses) {
+            weightedClauseWrapper.clause.shuffle();
         }
     }
     
@@ -113,42 +95,11 @@ public abstract class AbstractSolver implements Solver {
     public String toString() {
         StringBuilder resultBuilder = new StringBuilder();
         
-        resultBuilder.append("Solver with " + variables.size() + " item(s) {");
-        resultBuilder.append(clausesToString("normal", normalClauses));
-        resultBuilder.append("\n");
-        resultBuilder.append(specialClauseWrappersToString("special", specialClauseWrappers));
-        resultBuilder.append("\n");
-        resultBuilder.append(clausesToString("low-priority", lowPriorityOptionalClauses));
-        resultBuilder.append("\n");
-        resultBuilder.append(clausesToString("medium-priority", mediumPriorityOptionalClauses));
-        resultBuilder.append("\n");
-        resultBuilder.append(clausesToString("high-priority", highPriorityOptionalClauses));
+        resultBuilder.append("Solver with " + variables.size() + " item(s)");
         
         return resultBuilder.toString();
     }
 
-    protected String clausesToString(String name, List<Clause> clauses) {
-        StringBuilder resultBuilder = new StringBuilder();
-        resultBuilder.append("\n    " + name + " {");
-        for (Clause clause: clauses) {
-            resultBuilder.append("\n        ");
-            resultBuilder.append(clause.toString());
-        }
-        resultBuilder.append("\n    }");
-        return resultBuilder.toString();
-    }
-
-    protected String specialClauseWrappersToString(String name, List<SpecialClauseWrapper> specialClauseWrappers) {
-        StringBuilder resultBuilder = new StringBuilder();
-        resultBuilder.append("\n    " + name + " {");
-        for (SpecialClauseWrapper specialClauseWrapper: specialClauseWrappers) {
-            resultBuilder.append("\n        ");
-            resultBuilder.append("[" + specialClauseWrapper.minimum + ", " + specialClauseWrapper.maximum + "]" + specialClauseWrapper.clause.toString());
-        }
-        resultBuilder.append("\n    }");
-        return resultBuilder.toString();
-    }
-    
     protected void registerClauseItems(Clause clause) {
         for (Literal literal: clause.getLiterals()) {
             registerVariable(literal.getVariable());
@@ -173,57 +124,60 @@ public abstract class AbstractSolver implements Solver {
         return resultBuilder.toString();
     }
     
-    protected List<Clause> getNormalClausesForDecision() {
+    protected List<Clause> getClausesForDecision() {
         ArrayList<Clause> clauses = new ArrayList<Clause>(normalClauses);
-        clauses.addAll(highPriorityOptionalClauses);
+        for (WeightedClauseWrapper weightedClauseWrapper: importantOptionalClauses) {
+            clauses.add(weightedClauseWrapper.clause);
+        }
         return clauses;
     }
 
-    protected List<WeightedClauseWrapper> getWeightedClauseWrappers() {
-        return getWeightedClauseWrappers(1, 32, 1024);
-    }
-
-    protected List<WeightedClauseWrapper> getWeightedClauseWrappers(int level1, int level2, int level3) {
-        int lowPriorityWeight = level1;
-        int mediumPriorityWeight = level1;
-        int highPriorityWeight = level1;
-        if (lowPriorityOptionalClauses.isEmpty()) {
-            if (!mediumPriorityOptionalClauses.isEmpty()) {
-                highPriorityWeight = level2;
-            }
-        } else {
-            if (mediumPriorityOptionalClauses.isEmpty()) {
-                highPriorityWeight = level2;
-            } else {
-                mediumPriorityWeight = level2;
-                highPriorityWeight = level3;
-            }
-        }
-        List<WeightedClauseWrapper> result = new ArrayList<WeightedClauseWrapper>();
-        for (Clause clause: lowPriorityOptionalClauses) {
-            result.add(new WeightedClauseWrapper(clause, lowPriorityWeight));
-        }
-        for (Clause clause: mediumPriorityOptionalClauses) {
-            result.add(new WeightedClauseWrapper(clause, mediumPriorityWeight));
-        }
-        for (Clause clause: highPriorityOptionalClauses) {
-            result.add(new WeightedClauseWrapper(clause, highPriorityWeight));
-        }
-        return result;
-    }
-    
-    protected class SpecialClauseWrapper {
+    protected class CardinalityClauseWrapper {
         
         public final Clause clause;
         
-        public final Integer minimum;
+        public final boolean hasMaximum;
         
-        public final Integer maximum;
+        public final int minimum;
         
-        public SpecialClauseWrapper(Clause clause, Integer minimum, Integer maximum) {
+        public final int maximum;
+
+        public CardinalityClauseWrapper(Clause clause, int minimum) {
             this.clause = clause;
+            this.hasMaximum = false;
+            this.minimum = minimum;
+            this.maximum = -1;
+        }
+
+        public CardinalityClauseWrapper(Clause clause, int minimum, int maximum) {
+            this.clause = clause;
+            this.hasMaximum = true;
             this.minimum = minimum;
             this.maximum = maximum;
+        }
+
+        public boolean isAlways() {
+            return (!hasMaximum && minimum == 0);
+        }
+
+        public boolean isAtLeast() {
+            return !hasMaximum;
+        }
+
+        public boolean isAtMost() {
+            return !hasMaximum;
+        }
+
+        public boolean isBound() {
+            return (hasMaximum && minimum > 0);
+        }
+
+        public boolean isExactly() {
+            return (hasMaximum && minimum == maximum);
+        }
+
+        public boolean isOne() {
+            return (hasMaximum && minimum == 1 && maximum == 1);
         }
         
     }

@@ -1,7 +1,6 @@
 package hu.webarticum.jsatbuilder.solver.sat4j;
 
-import java.util.List;
-
+import org.sat4j.core.VecInt;
 import org.sat4j.specs.ISolver;
 
 public class WeightedSat4jSolver extends AbstractSat4jSolver {
@@ -12,19 +11,25 @@ public class WeightedSat4jSolver extends AbstractSat4jSolver {
         for (Clause clause: normalClauses) {
             weightedSolver.addHardClause(createSat4jVecInt(clause));
         }
-        for (SpecialClauseWrapper specialClauseWrapper: specialClauseWrappers) {
-            if (specialClauseWrapper.minimum!=null && specialClauseWrapper.maximum!=null) {
-                weightedSolver.addExactly(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
-            } else if (specialClauseWrapper.minimum!=null) {
-                weightedSolver.addAtLeast(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.minimum);
-            } else if (specialClauseWrapper.maximum!=null) {
-                weightedSolver.addAtMost(createSat4jVecInt(specialClauseWrapper.clause), specialClauseWrapper.maximum);
+        for (CardinalityClauseWrapper cardinalityClauseWrapper: cardinalityClauses) {
+            VecInt sat4jClause = createSat4jVecInt(cardinalityClauseWrapper.clause);
+            if (cardinalityClauseWrapper.isExactly()) {
+                solver.addExactly(sat4jClause, cardinalityClauseWrapper.minimum);
+            } else if (cardinalityClauseWrapper.isBound()) {
+                solver.addAtLeast(sat4jClause, cardinalityClauseWrapper.minimum);
+                solver.addAtMost(sat4jClause, cardinalityClauseWrapper.maximum);
+            } else if (cardinalityClauseWrapper.isAtLeast()) {
+                solver.addAtLeast(sat4jClause, cardinalityClauseWrapper.minimum);
+            } else if (cardinalityClauseWrapper.isAtMost()) {
+                solver.addAtMost(sat4jClause, cardinalityClauseWrapper.maximum);
             } else {
-                weightedSolver.addClause(createSat4jVecInt(specialClauseWrapper.clause));
+                solver.addClause(sat4jClause);
             }
         }
-        List<WeightedClauseWrapper> weightedClauseWrappers = getWeightedClauseWrappers();
-        for (WeightedClauseWrapper weightedClauseWrapper: weightedClauseWrappers) {
+        for (WeightedClauseWrapper weightedClauseWrapper: optionalClauses) {
+            weightedSolver.addSoftClause(weightedClauseWrapper.weight, createSat4jVecInt(weightedClauseWrapper.clause));
+        }
+        for (WeightedClauseWrapper weightedClauseWrapper: importantOptionalClauses) {
             weightedSolver.addSoftClause(weightedClauseWrapper.weight, createSat4jVecInt(weightedClauseWrapper.clause));
         }
     }
