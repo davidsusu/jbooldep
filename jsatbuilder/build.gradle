@@ -5,7 +5,12 @@ apply plugin: 'maven'
 sourceCompatibility = "1.6";
 targetCompatibility = "1.6";
 
+group = 'hu.webarticum'
 version = '0.2'
+description = 'SAT formula builder with constraint dependency tracking, written in Java'
+
+def scmUrl = 'https://github.com/davidsusu/jsatbuilder.git'
+def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
 repositories {
     jcenter()
@@ -17,4 +22,64 @@ dependencies {
     implementation 'org.ow2.sat4j:org.ow2.sat4j.core:2.3.5'
     implementation 'org.ow2.sat4j:org.ow2.sat4j.maxsat:2.3.5'
     implementation 'org.ow2.sat4j:org.ow2.sat4j.pb:2.3.5 '
+}
+
+signing {
+    required { true }
+    sign configurations.archives
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: project.ext.mavenRepositoryUrl) {
+                authentication(
+                    userName: project.ext.mavenRepositoryUsername,
+                    password: project.ext.mavenRepositoryPassword
+                )
+            }
+            beforeDeployment { MavenDeployment deployment ->
+                signing.signPom(deployment)
+            }
+            pom.artifactId = project.name
+            pom.project {
+                name = project.name
+                description = project.description
+                url = websiteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                scm {
+                    connection 'scm:git:' + scmUrl
+                    developerConnection 'scm:git:' + scmUrl
+                    url scmUrl
+                }
+                developers {
+                    developer {
+                        id = 'davidsusu'
+                        name = 'Dávid Horváth'
+                        email = 'horvath@webarticum.hu'
+                    }
+                }
+            }
+        }
+    }
 }
