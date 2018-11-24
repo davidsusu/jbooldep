@@ -54,6 +54,20 @@ public interface Solver {
         public Literal getNegated() {
             return new Literal(variable, !positive);
         }
+        
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Literal)) {
+                return false;
+            }
+            Literal otherLiteral = (Literal)obj;
+            return otherLiteral.variable.equals(variable) && otherLiteral.positive == positive;
+        }
+        
+        @Override
+        public int hashCode() {
+            return variable.hashCode() * (positive ? 1 : -1);
+        }
 
         @Override
         public String toString() {
@@ -100,6 +114,20 @@ public interface Solver {
         }
         
         @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Clause)) {
+                return false;
+            }
+            Clause otherClause = (Clause)obj;
+            return literals.equals(otherClause.literals);
+        }
+        
+        @Override
+        public int hashCode() {
+            return literals.hashCode();
+        }
+        
+        @Override
         public String toString() {
             return literals.toString();
         }
@@ -133,6 +161,15 @@ public interface Solver {
         @Override
         public Iterator<Literal> iterator() {
             return new ModelIterator();
+        }
+        
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Model)) {
+                return false;
+            }
+            Model otherModel = (Model)obj;
+            return variableValueMap.equals(otherModel.variableValueMap);
         }
         
         @Override
