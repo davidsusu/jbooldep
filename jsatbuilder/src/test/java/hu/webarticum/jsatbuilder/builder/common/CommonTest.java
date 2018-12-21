@@ -12,7 +12,7 @@ import hu.webarticum.jsatbuilder.solver.core.Solver;
 public class CommonTest {
 
     @Test
-    public void test() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void test1() throws Exception {
         ConstraintSetSolverFiller constraints = new ConstraintSetSolverFiller(true);
 
         Variable v1_1 = new Variable("1.1");
@@ -27,8 +27,7 @@ public class CommonTest {
         constraints.add(new OrConstraint(v1_2, v1_3));
         constraints.add(new OrConstraint(v1_2, v2_2));
         
-        Solver solver = (Solver)Class.forName("hu.webarticum.jsatbuilder.solver.sat4j.LightSat4jSolver").newInstance();
-        constraints.fillSolver(solver);
+        Solver solver = createSolverWith(constraints);
         
         if (!solver.run()) {
             fail("Solution not found!");
@@ -57,4 +56,53 @@ public class CommonTest {
         }
     }
 
+    @Test
+    public void test2AIsTrue() throws Exception {
+        doSimpleTest(true);
+    }
+
+    @Test
+    public void test2AIsFalse() throws Exception {
+        doSimpleTest(false);
+    }
+    
+    private void doSimpleTest(boolean aIsTrue) throws Exception {
+        Variable a = new Variable("a");
+        Variable b = new Variable("b");
+        Variable c = new Variable("c");
+        Variable d = new Variable("d");
+        
+        ConstraintSetSolverFiller constraints = new ConstraintSetSolverFiller();
+        constraints.add(new OrConstraint(a, b));
+        constraints.add(new EqualConstraint(
+            new DefinitionLiteral(c, true),
+            new DefinitionLiteral(d, false))
+        );
+        constraints.add(new EqualConstraint(a, c));
+        constraints.add(new EqualConstraint(b, d));
+        constraints.add(new GeneralClauseSetConstraint(new DefinitionLiteral[][] {
+            { new DefinitionLiteral(a, aIsTrue) }
+        }));
+
+        Solver solver = createSolverWith(constraints);
+        
+        if (!solver.run()) {
+            fail("Model was not found");
+        }
+        
+        Solver.Model model = solver.getModel();
+
+        assertEquals(aIsTrue, model.get(a));
+        assertEquals(!aIsTrue, model.get(b));
+        assertEquals(aIsTrue, model.get(c));
+        assertEquals(!aIsTrue, model.get(d));
+    }
+    
+    private Solver createSolverWith(ConstraintSetSolverFiller constraints) throws Exception {
+        String className = "hu.webarticum.jsatbuilder.solver.sat4j.LightSat4jSolver";
+        Solver solver = (Solver)Class.forName(className).newInstance();
+        constraints.fillSolver(solver);
+        return solver;
+    }
+    
 }
