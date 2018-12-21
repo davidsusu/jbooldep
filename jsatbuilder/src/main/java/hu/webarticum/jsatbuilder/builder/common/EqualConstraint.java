@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import hu.webarticum.jsatbuilder.builder.core.Definition;
+import hu.webarticum.jsatbuilder.builder.core.Viability;
 import hu.webarticum.jsatbuilder.solver.core.Solver;
 
 public class EqualConstraint extends AbstractLiteralListConstraint {
@@ -18,6 +19,11 @@ public class EqualConstraint extends AbstractLiteralListConstraint {
     
     public EqualConstraint(Collection<?> literalsOrDefinitions) {
         super(false, literalsOrDefinitions);
+    }
+
+    @Override
+    protected Viability createViability(List<Definition> definitions) {
+        return new AtLeastViability(1, definitions);
     }
 
     @Override
