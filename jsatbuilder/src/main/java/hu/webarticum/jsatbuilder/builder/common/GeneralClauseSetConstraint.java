@@ -133,7 +133,7 @@ public class GeneralClauseSetConstraint extends AbstractConstraint {
     protected String getClauseListString() {
         List<String> clauseDescriptions = new ArrayList<String>();
         for (List<DefinitionLiteral> clause: clauses) {
-            clauseDescriptions.add("[" + AbstractLiteralListConstraint.literalsListToString(clause) + "]");
+            clauseDescriptions.add("[" + Util.literalsListToString(clause) + "]");
         }
         return String.join(", ", clauseDescriptions.toArray(new String[clauseDescriptions.size()]));
     }

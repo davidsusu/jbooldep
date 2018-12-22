@@ -53,5 +53,14 @@ public abstract class AbstractLiteralListHelper extends AbstractHelper {
     protected Viability createViability(List<Definition> definitions) {
         return new DefaultViability(definitions);
     }
+
+    protected String getLiteralListString() {
+        return Util.literalsListToString(literalListManager.getLiterals());
+    }
+    
+    @Override
+    public String getInfo() {
+        return getClass().getSimpleName() + "([" + getLiteralListString() + "])";
+    }
     
 }

@@ -27,4 +27,9 @@ public class DefinitionLiteral {
         return new Solver.Literal(definition, positive);
     }
     
+    @Override
+    public String toString() {
+        return toSolverLiteral().toString();
+    }
+    
 }
